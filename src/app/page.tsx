@@ -10,9 +10,9 @@ export default function Home() {
 
   return (
     <div ref={gameContainer} className={styles.game_container}>
-      <Application resizeTo={gameContainer}>
+      <Application resizeTo={gameContainer} antialias>
         <GameContainer />
       </Application>
-    </div>
+    </div >
   );
 }
