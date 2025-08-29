@@ -140,44 +140,82 @@ export default class CafeController {
 
         return customerNew;
     }
-
-    serve(customerId: string) {
+    serve(customerId: string): {
+        servedItems: { stockId: string; quantity: number }[], // Danh sach cac mon an da phuc vu
+        servedAll: boolean // Đã phục vụ hoàn thành khach hay chưa
+    } {
         const customerIndex = this.customers.findIndex((c) => c.id === customerId);
+
         if (customerIndex === -1)
-            return {success: false, message: 'Customer not found'};
+            return { servedItems: [], servedAll: false};
+
 
         const customer = this.customers[customerIndex];
 
-        // Trừ món, cộng tiền
-        customer.orders.forEach((order) => {
-            const stock = this.stocks.find((s) => s.id === order.stockId);
-            if (
-                stock &&
-                stock.enabled &&
-                stock.quantity >= order.quantity
-            ) {
-                stock.quantity -= order.quantity;
+        let isServedAll = true; // trạng thái phục vụ được tất cả món án + số lượng mà khách order
 
-                let priceToReward = stock.sellPrices[stock.currentIndexLevel] // giá tiền nhận được
-                
-                if (this.doubleRewardCount > 0) {
-                    priceToReward *= 2;
-                }
-                const earned = priceToReward * order.quantity;
+        const servedItems: { stockId: string; quantity: number }[] = []; // danh sách món ăn + số lượng đã phục vụ
 
-                this.balance += earned;
+        customer.orders.forEach(order => {
+
+            const stock = this.stocks.find(s => s.id === order.stockId);
+
+            if (!stock || !stock.enabled || stock.quantity <= 0) {
+                isServedAll = false;
+                return;
             }
+
+            const serveQuantity = Math.min(stock.quantity, order.quantity); // Lấy số lương tối đa stock đang có để phục vụ order
+
+
+            stock.quantity -= serveQuantity; // trừ stock đang có
+            order.quantity -= serveQuantity; // trừ số lượng trong order
+
+            // Lưu lại số lượng món ăn đã phục vụ
+            if (serveQuantity > 0) {
+                servedItems.push({ stockId: stock.id, quantity: serveQuantity });
+            }
+
+            if (order.quantity > 0) isServedAll = false; // trong order vẫn có món ăn còn số lượng cần mua -> đánh dấu chua phuc vu xong
+
         });
 
-        // Giảm số lượng khách còn x2
-        if (this.doubleRewardCount > 0) {
-            this.doubleRewardCount -= 1;
+        // Xóa những món đã phục vụ của khách hàng
+        customer.orders = customer.orders.filter(order => order.quantity > 0);
+
+        if (!isServedAll) {
+            return {
+                servedItems,
+                servedAll: false
+            };
         }
 
-        // Xóa customer đã phục vụ xong trong danh sách
+        // Nếu đủ phục vụ toàn bộ order của khách → cộng tiền
+        let totalEarned = 0;
+
+        servedItems.forEach(item => {
+
+            const stock = this.stocks.find(s => s.id === item.stockId)!;
+
+            let priceToReward = stock.sellPrices[stock.currentIndexLevel]; // số tiền nhận đc khi phuc vụ xong 1 món
+
+            if (this.doubleRewardCount > 0) priceToReward *= 2; // dùng ability x2 tiền
+
+            totalEarned += priceToReward * item.quantity;
+        });
+
+        this.balance += totalEarned;
+
+        // Giảm số khách còn x2
+        if (this.doubleRewardCount > 0) this.doubleRewardCount -= 1;
+
+        // Xóa khách đã phục vụ xong
         this.customers.splice(customerIndex, 1);
 
-        return {success: true, customer, balance: this.getBalance()};
+        return {
+            servedItems,
+            servedAll: true
+        };
     }
 
     getAbilities(): Ability[] {
