@@ -65,10 +65,10 @@ console.log('Shop sau khi mua s2', game.getShop());
 // game.buyAbilityItem('2')
 // game.buyAbilityItem('3')
 console.log('Abilities trc khi mua :', game.getAbilities());
-game.buyAbilityItem('1')
+game.buyAbilityItem(2)
 
 console.log('Abilities sau khi mua 1 :', game.getAbilities());
-game.buyAbilityItem('3')
+game.buyAbilityItem(3)
 console.log('Abilities sau khi mua 3:', game.getAbilities());
 
 //
