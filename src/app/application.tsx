@@ -1,6 +1,6 @@
 import { extend, useApplication } from "@pixi/react";
 import { Container } from "pixi.js";
-import CongraEffect from "./effects/congra";
+import CongraEffect from "../effects/congra";
 
 extend({
   Container,
