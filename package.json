@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test-cafe-logic": "tsc --skipLibCheck src/controllers/test-cafe.ts & node src/controllers/test-cafe.js"
   },
   "dependencies": {
     "@pixi/react": "^8.0.0-beta.25",
