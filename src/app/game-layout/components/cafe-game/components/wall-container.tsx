@@ -1,9 +1,9 @@
 import { usePixiTexture } from "@/hooks/usePixiTexture";
 import { useApplication, useExtend } from "@pixi/react";
-import { Container, Sprite, Texture, TilingSprite } from "pixi.js";
+import { Sprite, Texture, TilingSprite } from "pixi.js";
 
 export default function WallContainer() {
-  useExtend({ Container, Sprite, TilingSprite });
+  useExtend({ Sprite, TilingSprite });
   const { app } = useApplication();
   const appHeight = app.view.height;
   const appWidth = app.view.width;

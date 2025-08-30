@@ -1,10 +1,12 @@
 import { usePixiTexture } from "@/hooks/usePixiTexture";
 import { useApplication, useExtend } from "@pixi/react";
-import { Container, Sprite, Texture, TilingSprite } from "pixi.js";
-import VisitShopButton from "../../button-layout/button-layout";
+import { Sprite, Texture, TilingSprite } from "pixi.js";
+import ButtonLayout from "../../button-layout/button-layout";
+import QuizStore from "@/stores/quiz-store/quiz-store";
 
 export default function TableContainer() {
-  useExtend({ Container, Sprite, TilingSprite });
+  useExtend({ Sprite, TilingSprite });
+  const { setToggleQuizContainer } = QuizStore();
   const { app } = useApplication();
   const appHeight = app.view.height;
   const appWidth = app.view.width;
@@ -17,6 +19,22 @@ export default function TableContainer() {
   const buttonContainerWidth = appWidth / 1.8;
   const buttonContainerHeight = appHeight / 9;
   const buttonWidth = buttonContainerWidth / 2.5;
+
+  const doClickPlate = (index: number) => {
+    console.log('index', index);
+
+  }
+
+  const doClickRestockFood = () => {
+    setToggleQuizContainer(true);
+    console.log('doClickRestockFood');
+
+  }
+
+  const doClickVisitShop = () => {
+    console.log('doClickVisitShop');
+
+  }
 
   return (
     <pixiContainer label="Table cafe-game"
@@ -53,6 +71,9 @@ export default function TableContainer() {
               y={y}
               width={plateWidth}
               height={plateHeight}
+              eventMode="static"
+              cursor="pointer"
+              onClick={() => doClickPlate(i)}
             />
           );
         })}
@@ -63,12 +84,16 @@ export default function TableContainer() {
         x={(appWidth - buttonContainerWidth) / 2}
         y={currentTableHeight - buttonContainerHeight - 10}
       >
-        <VisitShopButton
+        <ButtonLayout
           btnWidth={buttonWidth}
-          btnText="Restock Food" />
-        <VisitShopButton
+          btnText="Restock Food"
+          doClickBtn={doClickRestockFood}
+        />
+        <ButtonLayout
           btnWidth={buttonWidth}
-          btnContainerX={(buttonContainerWidth - buttonWidth)} />
+          btnContainerX={(buttonContainerWidth - buttonWidth)}
+          doClickBtn={doClickVisitShop}
+        />
       </pixiContainer>
     </pixiContainer>
   )

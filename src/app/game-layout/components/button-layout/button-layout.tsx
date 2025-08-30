@@ -2,15 +2,17 @@ import { useCallback } from 'react';
 import { Graphics, TextStyle, Text } from 'pixi.js';
 import { useExtend } from '@pixi/react';
 
-export default function VisitShopButton({
+export default function ButtonLayout({
   btnWidth = 300,
   btnHeight = 80,
   btnRadius = 10,
   btnText = "Visit Shop",
   btnContainerX = 0,
-  btnContainerY = 0
+  btnContainerY = 0,
+  doClickBtn = () => { }
+
 }) {
-  useExtend({ Graphics, TextStyle, Text });
+  useExtend({ Graphics, Text });
 
   const buttonWidth = btnWidth;
   const buttonHeight = btnHeight;
@@ -63,7 +65,12 @@ export default function VisitShopButton({
 
   return (
     <pixiContainer x={btnContainerX} y={btnContainerY}>
-      <pixiGraphics draw={draw} />
+      <pixiGraphics
+        draw={draw}
+        eventMode="static"
+        cursor="pointer"
+        onClick={doClickBtn}
+      />
       <pixiText
         text={btnText}
         style={textStyle}
