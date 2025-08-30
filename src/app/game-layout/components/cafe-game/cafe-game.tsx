@@ -10,8 +10,8 @@ export default function CafeGame() {
       <WallContainer />
       <TableContainer />
       {/* <TableContainer2 /> */}
-      {/* <QuizLayout /> */}
-      <QuizLayout2 />
+      <QuizLayout />
+      {/* <QuizLayout2 /> */}
     </>
   );
 }

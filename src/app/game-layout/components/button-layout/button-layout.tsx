@@ -89,7 +89,7 @@ export default function ButtonLayout({
       interactive={true}
       eventMode="static"
       cursor="pointer"
-      onClick={doClickBtn}
+      onPointerDown={doClickBtn}
     >
       <pixiGraphics draw={draw} eventMode="static" cursor="pointer" />
       <pixiText

@@ -18,7 +18,7 @@ export default function CongraEffect() {
   const { app } = useApplication();
   const effectContainer = useRef<Container>(new Container());
   const maggotRefs = useRef<Sprite[]>([]);
-  const totalSprites = 100;
+  const totalSprites = 150;
   const flipSpeed = 0.08;
 
   const addMaggotRefs = (el: Sprite) => {
@@ -33,7 +33,7 @@ export default function CongraEffect() {
         if (maggot.fallSpeed === undefined) {
           Object.defineProperty(maggot, "fallSpeed", {
             writable: true,
-            value: getRandomFloat(4, 5),
+            value: getRandomFloat(4, 9),
           });
         }
 
