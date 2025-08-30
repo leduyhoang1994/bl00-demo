@@ -10,9 +10,12 @@
     "test-cafe-logic": "tsc --skipLibCheck src/controllers/test-cafe.ts & node src/controllers/test-cafe.js"
   },
   "dependencies": {
-    "@pixi/react": "^8.0.0-beta.25",
+    "@pixi/gif": "^3.0.1",
+    "@pixi/layout": "^3.1.0",
+    "@pixi/react": "^8.0.3",
+    "gsap": "^3.13.0",
     "next": "15.5.2",
-    "pixi.js": "^8.2.6",
+    "pixi.js": "^8.12.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "zustand": "^5.0.8"

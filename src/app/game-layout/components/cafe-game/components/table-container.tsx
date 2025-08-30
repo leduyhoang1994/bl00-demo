@@ -1,3 +1,5 @@
+'use client';
+
 import { usePixiTexture } from "@/hooks/usePixiTexture";
 import { useApplication, useExtend } from "@pixi/react";
 import { Sprite, Texture, TilingSprite } from "pixi.js";
@@ -8,8 +10,8 @@ export default function TableContainer() {
   useExtend({ Sprite, TilingSprite });
   const { setToggleQuizContainer } = QuizStore();
   const { app } = useApplication();
-  const appHeight = app.view.height;
-  const appWidth = app.view.width;
+  const appHeight = app.screen.height;
+  const appWidth = app.screen.width;
   const currentTableHeight = appHeight / 2;
   const textureTable = usePixiTexture("/images/cafe-game/back-ground-table.svg");
   const texturePlate = usePixiTexture("/images/cafe-game/plate.svg");
@@ -33,7 +35,6 @@ export default function TableContainer() {
 
   const doClickVisitShop = () => {
     console.log('doClickVisitShop');
-
   }
 
   return (

@@ -1,3 +1,6 @@
+'use client';
+
+import '@pixi/layout/devtools';
 import { extend, useApplication } from "@pixi/react";
 import { Container } from "pixi.js";
 import CongraEffect from "../effects/congra";

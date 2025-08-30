@@ -1,3 +1,5 @@
+'use client';
+
 import { usePixiTexture } from "@/hooks/usePixiTexture";
 import { useApplication, useExtend } from "@pixi/react";
 import { Sprite, Texture, TilingSprite } from "pixi.js";
