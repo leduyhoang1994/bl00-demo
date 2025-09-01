@@ -6,10 +6,12 @@ import { Container, Sprite, Texture, TilingSprite } from "pixi.js";
 import ButtonLayout from "../../button-layout/button-layout";
 import QuizStore from "@/stores/quiz-store/quiz-store";
 import { useRef } from "react";
+import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";
 
 export default function TableContainer() {
   useExtend({ Sprite, TilingSprite });
   const { setToggleQuizContainer } = QuizStore();
+  const { setToggleVisitShop } = CafeGameStore();
   const { app } = useApplication();
   const plateContainer = useRef<Container>(new Container());
 
@@ -37,6 +39,7 @@ export default function TableContainer() {
 
   const doClickVisitShop = () => {
     console.log("doClickVisitShop");
+    setToggleVisitShop(true);
   };
 
   return (

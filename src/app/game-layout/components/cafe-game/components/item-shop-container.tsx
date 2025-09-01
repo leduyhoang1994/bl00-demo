@@ -10,8 +10,12 @@ import { useCallback } from 'react';
 export default function ItemShopContainer({
   name = "Toast",
   price = 0,
+  description = '',
   image = '',
-  disablePlate = false
+  disablePlate = false,
+  itemWidth = 250,
+  itemHeight = 120,
+  rotation = false
 }) {
   useExtend({ LayoutContainer, Sprite, Graphics });
 
@@ -22,8 +26,7 @@ export default function ItemShopContainer({
   const mainColor = '#757575';
   const textColor = '#3a3a3a';
   const borderWidth = 4;
-  const itemWidth = 250;
-  const itemHeight = 120;
+
   const itemRadius = 10;
   const shadowHeight = 5;
   const widthPlate = 100;
@@ -84,16 +87,16 @@ export default function ItemShopContainer({
               flexDirection: 'column',
               alignItems: "flex-end",
               justifyContent: "flex-start",
-              width: "100%",
+              width: itemWidth / 2,
               paddingRight: 10,
-              paddingTop: 15
+              paddingTop: 15,
             }}
           >
             <pixiText
               text={name}
               layout={{}}
               style={{
-                fontSize: "17%",
+                fontSize: 18,
                 fontWeight: "700",
                 fill: textColor,
               }}
@@ -101,12 +104,30 @@ export default function ItemShopContainer({
               resolution={2}
             />
             <pixiText
-              text={`$${price}`}
+              text={description}
               layout={{
-                marginTop: 30
+                marginTop: 0,
+                objectFit: 'fill',
+                width: itemWidth / 1.6,
               }}
               style={{
-                fontSize: "30%",
+                fontSize: 14,
+                fontWeight: "700",
+                fill: textColor,
+                wordWrap: true,
+                wordWrapWidth: 200,
+                align: "right",
+              }}
+              anchor={0.5}
+              resolution={2}
+            />
+            <pixiText
+              text={`$${price}`}
+              layout={{
+                marginTop: 10
+              }}
+              style={{
+                fontSize: 30,
                 fontWeight: "700",
                 fill: textColor,
               }}
@@ -131,11 +152,13 @@ export default function ItemShopContainer({
                 }} />
             </RenderIf>
             <pixiSprite texture={textureItem}
+              rotation={rotation ? -0.25 : 0}
               layout={{
-                width: !disablePlate ? "65%" : "100%",
-                height: !disablePlate ? "70%" : '100%',
+                width: !disablePlate ? "65%" : "90%",
+                height: !disablePlate ? "70%" : '90%',
                 position: "absolute",
-                marginBottom: 5
+                marginBottom: 5,
+                marginLeft: rotation ? 10 : 0
               }} />
           </layoutContainer>
         </layoutContainer>

@@ -5,10 +5,12 @@ import HeaderShopContainer from './header-shop-container';
 import { useApplication, useExtend } from '@pixi/react';
 import BodyShopContainer from './body-shop-container';
 import ButtonLayout from '../../button-layout/button-layout';
+import CafeGameStore from '@/stores/cafe-game-store/cafe-game-store';
 
 export default function ShopContainer() {
   useExtend({ LayoutContainer });
   const { app } = useApplication();
+  const { setToggleAbilitiShop, setToggleVisitShop, toggleAbilitiShop } = CafeGameStore();
   const appHeight = app.screen.height;
   const appWidth = app.screen.width;
   const buttonContainerWidth = appWidth * 0.95;
@@ -17,10 +19,13 @@ export default function ShopContainer() {
 
   const doClickAbilities = () => {
     console.log('doClickAbilities');
+    setToggleAbilitiShop(!toggleAbilitiShop);
 
   }
   const doClickExitShop = () => {
     console.log('doClickExitShop');
+    setToggleAbilitiShop(false);
+    setToggleVisitShop(false);
   }
 
   return (
@@ -42,7 +47,7 @@ export default function ShopContainer() {
         >
           <ButtonLayout
             btnWidth={buttonWidth}
-            btnText="Abilities"
+            btnText={!toggleAbilitiShop ? "Abilities" : "Upgrades"}
             doClickBtn={doClickAbilities}
           />
           <ButtonLayout
