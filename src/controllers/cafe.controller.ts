@@ -1,4 +1,18 @@
 import {Ability, Customer, Stock, OrderItem, Question, ShopItem, STOCKS, QUESTIONS, ABILITIES} from "../model";
+const MAX_CUSTOMER_CAN_SERVE = 3; // sô khách hàng tối đa có thể phục vụ
+const AVATARS_CUSTOMER = [
+    '/images/cafe-game/customers/alpaca.svg',
+    '/images/cafe-game/customers/chick.svg',
+    '/images/cafe-game/customers/chicken.svg',
+    '/images/cafe-game/customers/cow.svg',
+    '/images/cafe-game/customers/duck.svg',
+    '/images/cafe-game/customers/giraffe.svg',
+    '/images/cafe-game/customers/hedgehog.svg',
+    '/images/cafe-game/customers/parrot.svg',
+    '/images/cafe-game/customers/puppy.svg',
+    '/images/cafe-game/customers/toucan.svg',
+    '/images/cafe-game/customers/walrus.svg',
+]
 
 export default class CafeController {
     private stocks: Stock[] = [];
@@ -117,6 +131,13 @@ export default class CafeController {
     }
 
     getNextCustomer(): Customer {
+
+        // limit 3 khach hang order
+        if(this.customers.length == MAX_CUSTOMER_CAN_SERVE){
+            console.log('Maximum customer serve')
+            throw new Error('Maximum customer serve')
+        }
+
         const enabledStocks = this.stocks.filter((s) => s.enabled);
 
         const orderCount = Math.min(
@@ -135,6 +156,7 @@ export default class CafeController {
             id: 'c_' + Math.random().toString(36).substring(2, 9),
             name: 'Customer ' + Math.floor(Math.random() * 100),
             orders,
+            avatar: AVATARS_CUSTOMER[Math.floor(Math.random() * AVATARS_CUSTOMER.length)]
         };
         this.customers.push(customerNew);
 
@@ -197,7 +219,7 @@ export default class CafeController {
 
             const stock = this.stocks.find(s => s.id === item.stockId)!;
 
-            let priceToReward = stock.sellPrices[stock.currentIndexLevel]; // số tiền nhận đc khi phuc vụ xong 1 món
+            let priceToReward = stock.rewardPrices[stock.currentIndexLevel]; // số tiền nhận đc khi phuc vụ xong 1 món
 
             if (this.doubleRewardCount > 0) priceToReward *= 2; // dùng ability x2 tiền
 
