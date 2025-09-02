@@ -33,7 +33,7 @@ export default function BodyShopContainer() {
       description: "Give a player +25% of their balance",
       price: 500,
       image: "/images/cafe-game/abilities-paycheck.svg",
-      disablePlate: false,
+      disablePlate: true,
     },
     {
       name: "Supply Crate",

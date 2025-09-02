@@ -11,7 +11,7 @@ import CafeGameStore from '@/stores/cafe-game-store/cafe-game-store';
 export default function HeaderShopContainer() {
   useExtend({ Sprite, Graphics, Text, TilingSprite, LayoutContainer, Container });
   const { app } = useApplication();
-  const { toggleAbilitiShop, cafeMoney } = CafeGameStore();
+  const { toggleAbilitiShop, cafeBalance } = CafeGameStore();
   const textureCurtain = !toggleAbilitiShop ? usePixiTexture("/images/cafe-game/curtain.svg") : usePixiTexture("/images/cafe-game/curtain-abilities.svg");
   const textureRibonUpgrade = !toggleAbilitiShop ? usePixiTexture("/images/cafe-game/ribbon-upgrade.svg") : usePixiTexture("/images/cafe-game/ribbon-upgrade-abilities.svg");
   const textureRibonMoney = !toggleAbilitiShop ? usePixiTexture("/images/cafe-game/ribbon-money.svg") : usePixiTexture("/images/cafe-game/ribbon-money-abilities.svg");
@@ -95,7 +95,7 @@ export default function HeaderShopContainer() {
                   right: 0,
                   marginRight: 20
                 }}
-                text={`$${cafeMoney}`}
+                text={`$${cafeBalance}`}
                 style={{
                   fontSize: 44,
                   fontWeight: '900',

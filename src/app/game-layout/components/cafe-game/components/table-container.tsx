@@ -2,16 +2,18 @@
 
 import { usePixiTexture } from "@/hooks/usePixiTexture";
 import { useApplication, useExtend } from "@pixi/react";
-import { Container, Sprite, Texture, TilingSprite } from "pixi.js";
+import { Assets, Container, Sprite, Texture, TilingSprite } from "pixi.js";
 import ButtonLayout from "../../button-layout/button-layout";
 import QuizStore from "@/stores/quiz-store/quiz-store";
 import { useRef } from "react";
 import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";
+import { getCafeControllerInstance } from "@/helpers/cafeController.singleton";
+import PlateComponent from "./plate-component";
 
 export default function TableContainer() {
   useExtend({ Sprite, TilingSprite });
   const { setToggleQuizContainer } = QuizStore();
-  const { setToggleVisitShop } = CafeGameStore();
+  const { setToggleVisitShop, cafeStocks } = CafeGameStore();
   const { app } = useApplication();
   const plateContainer = useRef<Container>(new Container());
 
@@ -21,16 +23,12 @@ export default function TableContainer() {
   const textureTable = usePixiTexture(
     "/images/cafe-game/back-ground-table.svg"
   );
-  const texturePlate = usePixiTexture("/images/cafe-game/plate.svg");
+
   const itemsContainerWidth = appWidth * 0.92;
 
   const buttonContainerWidth = appWidth / 1.8;
   const buttonContainerHeight = appHeight / 9;
   const buttonWidth = buttonContainerWidth / 2.5;
-
-  const doClickPlate = (index: number) => {
-    console.log("index", index);
-  };
 
   const doClickRestockFood = () => {
     setToggleQuizContainer(true);
@@ -41,6 +39,8 @@ export default function TableContainer() {
     console.log("doClickVisitShop");
     setToggleVisitShop(true);
   };
+
+  console.log('cafeStocks', cafeStocks);
 
   return (
     <pixiContainer
@@ -64,23 +64,33 @@ export default function TableContainer() {
         x={(appWidth - plateContainer.current.width) / 2}
         y={15}
       >
-        {[...Array(9)].map((_, i) => {
+        {cafeStocks.map((_, i) => {
           const plateWidth = itemsContainerWidth / 9;
           const plateHeight = plateWidth;
           const x = i * plateWidth * 0.8;
           const y = i % 2 === 0 ? 0 : plateHeight * 0.8;
-
+          let plateIndex;
+          if (i % 2 === 0) {
+            plateIndex = i / 2;
+          } else {
+            plateIndex = (i - 1) / 2 + 5;
+          }
+          const plateData = cafeStocks[plateIndex];
+          const image = Assets.get(plateData.image);
+          const enabled = plateData.enabled;
+          const quantity = plateData.quantity;
           return (
-            <pixiSprite
+
+            <PlateComponent
+              enabled={enabled}
+              quantity={quantity}
+              i={plateIndex}
               key={i}
-              texture={texturePlate}
+              plateWidth={plateWidth}
+              plateHeight={plateHeight}
               x={x}
               y={y}
-              width={plateWidth}
-              height={plateHeight}
-              eventMode="static"
-              cursor="pointer"
-              onClick={() => doClickPlate(i)}
+              textureItem={image}
             />
           );
         })}

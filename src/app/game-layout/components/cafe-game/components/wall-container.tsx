@@ -9,7 +9,7 @@ import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";
 export default function WallContainer() {
   useExtend({ Sprite, TilingSprite, Graphics, Text });
   const { app } = useApplication();
-  const { cafeMoney } = CafeGameStore();
+  const { cafeBalance } = CafeGameStore();
   const appHeight = app.screen.height;
   const appWidth = app.screen.width;
   const currentWallHeight = appHeight / 2;
@@ -69,7 +69,7 @@ export default function WallContainer() {
         )}
       </pixiContainer>
       <pixiContainer label="Money cafe-game" x={appWidth / 1.2}>
-        <BoxLayout value={cafeMoney} />
+        <BoxLayout value={cafeBalance} />
       </pixiContainer>
     </pixiContainer>
   )

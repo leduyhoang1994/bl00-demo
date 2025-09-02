@@ -31,7 +31,7 @@ export default function TableContainer2() {
         alignSelf: "center",
         flexDirection: "row",
         width: appWidth,
-        height: currentTableHeight - 60,
+        height: currentTableHeight,
         justifyContent: "center",
         alignItems: "center",
         columnGap: 80,
@@ -43,7 +43,7 @@ export default function TableContainer2() {
     >
       {[...Array(9)].map((_, i) => {
         return (
-            <Plate key={`plate-${i}`} i={i} />
+          <Plate key={`plate-${i}`} i={i} />
         );
       })}
     </layoutContainer>

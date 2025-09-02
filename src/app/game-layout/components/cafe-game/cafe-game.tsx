@@ -7,16 +7,15 @@ import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";
 import { useEffect } from "react";
 import CafeController from "@/controllers/cafe.controller";
 import CustomerContainer from "./components/customer-container";
+import { getCafeControllerInstance } from "@/helpers/cafeController.singleton";
 
 export default function CafeGame() {
-  const { setCafeController, toggleVisitShop, setCafeMoney } = CafeGameStore();
+  const { toggleVisitShop, loadCafeBalance, loadCafeShopItems, loadCafeStocks } = CafeGameStore();
 
   useEffect(() => {
-    setCafeController(new CafeController());
-
-    setTimeout(() => {
-      setCafeMoney(100);
-    }, 2000);
+    loadCafeBalance();
+    loadCafeStocks();
+    loadCafeShopItems();
   }, [])
 
   return (
@@ -28,7 +27,6 @@ export default function CafeGame() {
       <RenderIf condition={toggleVisitShop}>
         <ShopContainer />
       </RenderIf>
-
     </>
   );
 }
