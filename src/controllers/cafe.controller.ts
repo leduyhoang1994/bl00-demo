@@ -1,3 +1,4 @@
+import { randomFromArray } from "../helpers/random";
 import {Ability, Customer, Stock, OrderItem, Question, ShopItem, STOCKS, QUESTIONS, ABILITIES} from "../model";
 const MAX_CUSTOMER_CAN_SERVE = 3; // sô khách hàng tối đa có thể phục vụ
 const AVATARS_CUSTOMER = [
@@ -150,7 +151,7 @@ export default class CafeController {
         const shuffled = [...enabledStocks].sort(() => 0.5 - Math.random());
         for (let i = 0; i < orderCount; i++) {
             const food = shuffled[i];
-            orders.push({stockId: food.id, quantity: 1});
+            orders.push({stockId: food.id, quantity: randomFromArray([1, 2, 3])});
         }
         const customerNew = {
             id: 'c_' + Math.random().toString(36).substring(2, 9),

@@ -4,10 +4,16 @@ import { useApplication, useExtend } from "@pixi/react";
 import gsap from "gsap";
 import { Graphics, TextStyle, Text, Container } from "pixi.js";
 import { useEffect, useRef } from "react";
+import AnswerBtn from "./answer-btn";
 
 export default function QuizLayout() {
   useExtend({ Graphics, Text });
-  const { setToggleQuizContainer, toggleQuizContainer, setShowCongraEffect, showCongraEffect } = QuizStore();
+  const {
+    setToggleQuizContainer,
+    toggleQuizContainer,
+    setShowCongraEffect,
+    showCongraEffect,
+  } = QuizStore();
   const { app } = useApplication();
   const appWidth = app.view.width;
   const appHeight = app.view.height;
@@ -29,8 +35,6 @@ export default function QuizLayout() {
   const boxWidth = (answerContainerWidth - gap) / 2;
   const boxHeight = (answerContainerHeight - gap) / 2;
 
-  const answerBorderRadius = 5;
-
   const baseStyle: any = {
     fontFamily: "Arial, sans-serif",
     fontWeight: "500",
@@ -42,7 +46,6 @@ export default function QuizLayout() {
   };
 
   const textStyleQuestion = new TextStyle({ ...baseStyle, fill: "black" });
-  const textStyleAnswer = new TextStyle({ ...baseStyle, fill: "white" });
 
   const colors = ["#FFA31E", "#3378FF", "#00CF77", "#FF462B"];
   const labels = ["a", "b", "c", "d"];
@@ -65,20 +68,6 @@ export default function QuizLayout() {
     g.roundRect(0, 0, appWidth, bodyHeight, 0).fill({ color: "white" });
   };
 
-  const drawBoxAnswer = (g: Graphics, colorBoxAnswer: string) => {
-    g.clear();
-    g.roundRect(0, 0, boxWidth, boxHeight, answerBorderRadius).fill({
-      color: colorBoxAnswer,
-    });
-    g.roundRect(
-      0,
-      boxHeight - shadowHeight,
-      boxWidth,
-      shadowHeight,
-      answerBorderRadius
-    ).fill(shadowObj);
-  };
-
   const doClickAnswser = (label: string) => {
     setShowCongraEffect(true);
     console.log(label);
@@ -92,7 +81,11 @@ export default function QuizLayout() {
   useEffect(() => {
     if (!toggleQuizContainer) return;
 
-    gsap.fromTo(quizContainer.current, { scale: 0 }, { scale: 1, duration: 0.2, ease: "none" });
+    gsap.fromTo(
+      quizContainer.current,
+      { scale: 0 },
+      { scale: 1, duration: 0.2, ease: "none" }
+    );
   }, [toggleQuizContainer]);
 
   if (!toggleQuizContainer) {
@@ -133,27 +126,24 @@ export default function QuizLayout() {
           const y = row * (boxHeight + gap);
 
           return (
-            <pixiContainer key={i} x={x} y={y}>
-              <pixiGraphics
-                draw={(g) => drawBoxAnswer(g, colors[i])}
-                eventMode="static"
-                cursor="pointer"
-                onPointerDown={() => doClickAnswser(labels[i])}
-              />
-              <pixiText
-                text={labels[i]}
-                style={textStyleAnswer}
-                anchor={0.5}
-                x={boxWidth / 2}
-                y={boxHeight / 2}
-              />
-            </pixiContainer>
+            <AnswerBtn
+              key={i}
+              i={i}
+              x={x}
+              y={y}
+              boxWidth={boxWidth}
+              boxHeight={boxHeight}
+              colors={colors}
+              labels={labels}
+              shadowHeight={shadowHeight}
+              shadowObj={shadowObj}
+              baseStyle={baseStyle}
+              doClickAnswser={doClickAnswser}
+            />
           );
         })}
       </pixiContainer>
-      {
-        showCongraEffect && <CongraEffect />
-      }
+      {showCongraEffect && <CongraEffect />}
     </pixiContainer>
   );
 }

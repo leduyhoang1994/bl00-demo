@@ -7,7 +7,8 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "test-cafe-logic": "tsc --skipLibCheck src/controllers/test-cafe.ts & node src/controllers/test-cafe.js"
+    "test-cafe-logic": "tsc --skipLibCheck src/controllers/test-cafe.ts & node src/controllers/test-cafe.js",
+    "test-cafe-logic-2": "tsc --skipLibCheck src/controllers/test-cafe-2.ts & node src/controllers/test-cafe-2.js"
   },
   "dependencies": {
     "@pixi/gif": "^3.0.1",

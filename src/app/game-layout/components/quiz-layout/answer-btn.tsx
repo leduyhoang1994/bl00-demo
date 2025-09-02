@@ -1,0 +1,111 @@
+import gsap from "gsap";
+import { Graphics, TextStyle } from "pixi.js";
+import { useEffect, useRef } from "react";
+import { darken } from "../../../../helpers/color";
+
+export default function AnswerBtn({
+  i,
+  x,
+  y,
+  boxWidth,
+  boxHeight,
+  colors,
+  labels,
+  baseStyle,
+  doClickAnswser,
+}: {
+  i: number;
+  x: number;
+  y: number;
+  boxWidth: number;
+  boxHeight: number;
+  shadowHeight: number;
+  shadowObj: any;
+  colors: string[];
+  labels: string[];
+  baseStyle: any;
+  doClickAnswser: (answer: string) => void;
+}) {
+  const answerBorderRadius = 5;
+  const textStyleAnswer = new TextStyle({ ...baseStyle, fill: "white" });
+  const btnGraphics = useRef<Graphics>(new Graphics());
+
+  const drawBoxAnswer = (g: Graphics, colorBoxAnswer: string) => {
+    g.clear();
+    g.roundRect(0, 0, boxWidth, boxHeight - 7, answerBorderRadius).fill({
+      color: colorBoxAnswer,
+    });
+  };
+
+  const drawShadown = (g: Graphics, colorBoxAnswer: string) => {
+    g.clear();
+    g.roundRect(
+      0,
+      boxHeight / 2,
+      boxWidth,
+      boxHeight / 2,
+      answerBorderRadius
+    ).fill({
+      color: darken(colorBoxAnswer, 0.3),
+    });
+  };
+
+  useEffect(() => {
+    if (!btnGraphics.current) {
+      return;
+    }
+
+    btnGraphics.current.on("pointerover", () => {
+      const gr = btnGraphics.current;
+      gsap.to(gr, {
+        y: gr.y - gr.height * 0.02,
+        duration: 0.1,
+      });
+    });
+
+    btnGraphics.current.on("pointerout", () => {
+      const gr = btnGraphics.current;
+      gsap.to(gr, {
+        y: 0,
+        duration: 0.1,
+      });
+    });
+
+    btnGraphics.current.on("pointerdown", () => {
+      const gr = btnGraphics.current;
+      gsap.to(gr, {
+        y: 5,
+        duration: 0.05,
+      });
+    });
+
+    btnGraphics.current.on("pointerup", () => {
+      const gr = btnGraphics.current;
+      gsap.to(gr, {
+        y: 0,
+        duration: 0.05,
+      }).then(() => {
+        doClickAnswser(labels[i]);
+      });
+    });
+  });
+
+  return (
+    <pixiContainer key={i} x={x} y={y}>
+      <pixiGraphics draw={(g) => drawShadown(g, colors[i])} />
+      <pixiGraphics
+        ref={btnGraphics}
+        draw={(g) => drawBoxAnswer(g, colors[i])}
+        eventMode="static"
+        cursor="pointer"
+      />
+      <pixiText
+        text={labels[i]}
+        style={textStyleAnswer}
+        anchor={0.5}
+        x={boxWidth / 2}
+        y={boxHeight / 2}
+      />
+    </pixiContainer>
+  );
+}
