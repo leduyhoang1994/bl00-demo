@@ -1,4 +1,4 @@
-import { randomFromArray } from "../helpers/random";
+import { getRandomFloat, randomFromArray } from "../helpers/random";
 import { Ability, Customer, Stock, OrderItem, Question, ShopItem, STOCKS, QUESTIONS, ABILITIES } from "../model";
 const MAX_CUSTOMER_CAN_SERVE = 3; // sô khách hàng tối đa có thể phục vụ
 const AVATARS_CUSTOMER = [
@@ -58,7 +58,7 @@ export default class CafeController implements CafeControllerInterface {
 
   // Lấy số tiền
   getBalance(): number {
-    return this.balance;
+    return parseInt(getRandomFloat(100, 500) as any);
   }
 
   // Lấy danh sách món ăn
