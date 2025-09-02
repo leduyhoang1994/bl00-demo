@@ -2,13 +2,16 @@
 
 import { usePixiTexture } from "@/hooks/usePixiTexture";
 import { useApplication, useExtend } from "@pixi/react";
-import { Sprite, Texture, TilingSprite } from "pixi.js";
+import { Graphics, Sprite, Texture, TilingSprite, Text } from "pixi.js";
+import BoxLayout from "../../box-layout/box-layout";
+import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";
 
 export default function WallContainer() {
-  useExtend({ Sprite, TilingSprite });
+  useExtend({ Sprite, TilingSprite, Graphics, Text });
   const { app } = useApplication();
-  const appHeight = app.view.height;
-  const appWidth = app.view.width;
+  const { cafeController } = CafeGameStore();
+  const appHeight = app.screen.height;
+  const appWidth = app.screen.width;
   const currentWallHeight = appHeight / 2;
   const itemsContainerWidth = appWidth * 0.9;
   const itemsContainerHeight = appHeight * 0.8 * 0.5;
@@ -16,6 +19,7 @@ export default function WallContainer() {
   const textureClock = usePixiTexture("/images/cafe-game/clock.svg");
   const textureWindow = usePixiTexture("/images/cafe-game/window.svg");
   const textureMenu = usePixiTexture("/images/cafe-game/menu.svg");
+  const currentBalance = cafeController?.getBalance() || 0;
 
   return (
     <pixiContainer label="Wall cafe-game">
@@ -64,6 +68,9 @@ export default function WallContainer() {
             height={itemsContainerWidth / 5}
           />
         )}
+      </pixiContainer>
+      <pixiContainer label="Money cafe-game" x={appWidth / 1.2}>
+        <BoxLayout value={currentBalance} />
       </pixiContainer>
     </pixiContainer>
   )

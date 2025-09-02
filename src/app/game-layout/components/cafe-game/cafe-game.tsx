@@ -6,9 +6,16 @@ import TableContainer from "./components/table-container";
 import TableContainer2 from "./components/table-container-2";
 import WallContainer from "./components/wall-container";
 import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";
+import { useEffect } from "react";
+import CafeController from "@/controllers/cafe.controller";
 
 export default function CafeGame() {
-  const { toggleVisitShop } = CafeGameStore();
+  const { setCafeController, toggleVisitShop } = CafeGameStore();
+
+  useEffect(() => {
+    setCafeController(new CafeController());
+  }, [])
+
   return (
     <>
       <WallContainer />
