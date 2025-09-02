@@ -10,10 +10,14 @@ import { useEffect } from "react";
 import CafeController from "@/controllers/cafe.controller";
 
 export default function CafeGame() {
-  const { setCafeController, toggleVisitShop } = CafeGameStore();
+  const { setCafeController, toggleVisitShop, setCafeMoney } = CafeGameStore();
 
   useEffect(() => {
     setCafeController(new CafeController());
+
+    setTimeout(() => {
+      setCafeMoney(100);
+    }, 2000);
   }, [])
 
   return (
