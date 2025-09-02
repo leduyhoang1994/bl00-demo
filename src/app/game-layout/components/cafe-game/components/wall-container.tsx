@@ -9,7 +9,7 @@ import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";
 export default function WallContainer() {
   useExtend({ Sprite, TilingSprite, Graphics, Text });
   const { app } = useApplication();
-  const { cafeController } = CafeGameStore();
+  const { cafeMoney } = CafeGameStore();
   const appHeight = app.screen.height;
   const appWidth = app.screen.width;
   const currentWallHeight = appHeight / 2;
@@ -19,7 +19,6 @@ export default function WallContainer() {
   const textureClock = usePixiTexture("/images/cafe-game/clock.svg");
   const textureWindow = usePixiTexture("/images/cafe-game/window.svg");
   const textureMenu = usePixiTexture("/images/cafe-game/menu.svg");
-  const currentBalance = cafeController?.getBalance() || 0;
 
   return (
     <pixiContainer label="Wall cafe-game">
@@ -70,7 +69,7 @@ export default function WallContainer() {
         )}
       </pixiContainer>
       <pixiContainer label="Money cafe-game" x={appWidth / 1.2}>
-        <BoxLayout value={currentBalance} />
+        <BoxLayout value={cafeMoney} />
       </pixiContainer>
     </pixiContainer>
   )

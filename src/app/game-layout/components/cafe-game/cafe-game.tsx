@@ -9,10 +9,14 @@ import CafeController from "@/controllers/cafe.controller";
 import CustomerContainer from "./components/customer-container";
 
 export default function CafeGame() {
-  const { setCafeController, toggleVisitShop } = CafeGameStore();
+  const { setCafeController, toggleVisitShop, setCafeMoney } = CafeGameStore();
 
   useEffect(() => {
     setCafeController(new CafeController());
+
+    setTimeout(() => {
+      setCafeMoney(100);
+    }, 2000);
   }, [])
 
   return (
