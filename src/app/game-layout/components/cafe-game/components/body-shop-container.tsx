@@ -1,19 +1,18 @@
-import '@pixi/layout/react';
-import '@pixi/layout';
-import { LayoutContainer } from '@pixi/layout/components';
-import { useExtend } from '@pixi/react';
-import { Sprite, Texture } from 'pixi.js';
-import { usePixiTexture } from '@/hooks/usePixiTexture';
-import RenderIf from '@/utils/condition-render';
-import ItemShopContainer, { ItemType } from './item-shop-container';
-import CafeGameStore from '@/stores/cafe-game-store/cafe-game-store';
-import React from 'react';
+import "@pixi/layout/react";
+import "@pixi/layout";
+import { LayoutContainer } from "@pixi/layout/components";
+import { useExtend } from "@pixi/react";
+import { Sprite, Texture } from "pixi.js";
+import { usePixiTexture } from "@/hooks/usePixiTexture";
+import RenderIf from "@/utils/condition-render";
+import ItemShopContainer, { ItemType } from "./item-shop-container";
+import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";
+import React from "react";
 
 const BodyShopContainer = () => {
   useExtend({ LayoutContainer, Sprite });
-  const { toggleAbilitiShop, cafeShopItems, cafeStocks, cafeAbilitiesItems } = CafeGameStore();
-  console.log('cafeShopItems', cafeShopItems);
-  console.log('cafeAbilitiesItems', cafeAbilitiesItems);
+  const { toggleAbilitiShop, cafeShopItems, cafeStocks, cafeAbilitiesItems } =
+    CafeGameStore();
 
   const textureWallShop = usePixiTexture("/images/cafe-game/wall-shop.svg");
 
@@ -22,30 +21,33 @@ const BodyShopContainer = () => {
       layout={{
         flex: 1,
         gap: 200,
-        position: 'relative'
-      }}>
+        position: "relative",
+      }}
+    >
       <RenderIf condition={textureWallShop !== Texture.EMPTY}>
         <layoutContainer
           layout={{
-            width: "50%"
-          }}>
+            width: "50%",
+          }}
+        >
           <pixiSprite
             texture={textureWallShop}
             layout={{
               width: "100%",
-              height: "100%"
+              height: "100%",
             }}
           />
         </layoutContainer>
         <layoutContainer
           layout={{
-            width: "50%"
-          }}>
+            width: "50%",
+          }}
+        >
           <pixiSprite
             texture={textureWallShop}
             layout={{
               width: "100%",
-              height: "100%"
+              height: "100%",
             }}
             scale={{ x: -1, y: 1 }}
           />
@@ -56,24 +58,40 @@ const BodyShopContainer = () => {
           layout={{
             position: "absolute",
             width: "100%",
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "center",
             gap: 30,
-            paddingTop: 20
+            paddingTop: 20,
           }}
         >
           {cafeStocks.map((dataStock, i) => {
             const enabled = cafeShopItems[i].enabled;
-            const description = dataStock.priceReWard;
+            const currentReward =
+              dataStock.rewardPrices[dataStock.currentIndexLevel] || 0;
+            const nextReward =
+              dataStock.rewardPrices[dataStock.currentIndexLevel + 1] || null;
+
+            let description = `$${currentReward} ${nextReward ? "→" : ""} ${
+              "$" + nextReward
+            }`;
+            const max =
+              dataStock.currentIndexLevel === dataStock.rewardPrices.length - 1;
+
             return (
               <ItemShopContainer
                 key={i}
                 {...dataStock}
+                priceSell={
+                  max
+                    ? "MAX"
+                    : dataStock.sellPrices[dataStock.currentIndexLevel + 1]
+                }
                 enabled={enabled}
                 type={ItemType.SHOP}
-                description={description} />
-            )
+                description={max ? currentReward : description}
+              />
+            );
           })}
         </layoutContainer>
       </RenderIf>
@@ -94,7 +112,8 @@ const BodyShopContainer = () => {
             const price = item.price;
             return (
               <ItemShopContainer
-                key={i} {...item}
+                key={i}
+                {...item}
                 itemWidth={300}
                 itemHeight={130}
                 rotation={true}
@@ -103,12 +122,12 @@ const BodyShopContainer = () => {
                 priceSell={price}
                 type={ItemType.ABILITIES}
               />
-            )
+            );
           })}
         </layoutContainer>
       </RenderIf>
-    </layoutContainer >
-  )
-}
+    </layoutContainer>
+  );
+};
 
 export default React.memo(BodyShopContainer);

@@ -4,10 +4,14 @@ import "@pixi/layout/react";
 import "@pixi/layout";
 import { usePixiTexture } from "@/hooks/usePixiTexture";
 import { useApplication, useExtend } from "@pixi/react";
-import { Assets, Graphics, Sprite } from "pixi.js";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Assets, Container, Graphics, Sprite, Texture } from "pixi.js";
+import { use, useEffect, useMemo, useRef, useState } from "react";
 import { LayoutContainer } from "@pixi/layout/components";
 import { randomFromArray } from "@/helpers/random";
+import gsap from "gsap";
+import RenderIf from "@/utils/condition-render";
+import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";
+import { getCafeControllerInstance } from "@/helpers/cafeController.singleton";
 
 const CUSTOMER_AVATARS = [
   "alpaca",
@@ -36,16 +40,23 @@ const FOODS = [
   "blook-yogurt",
 ];
 
+const FOOD_SIZE = 50;
+const TEXT_SIZE = 50;
+const AVATAR_WIDTH = 130;
+const AVATAR_HEIGHT = 150;
+
 function createTooltipBubble(app: any, options = {}) {
   const {
+    foodCount = 3,
     width = 150,
-    height = 200,
     radius = 12,
     tailSize = 20,
     border = 5,
     fill = 0xffffff,
     stroke = 0x00a9c9, // màu viền xanh
   }: any = options;
+
+  const height = foodCount * 60 + 20;
 
   const tailPos = height - 40;
 
@@ -69,65 +80,192 @@ function createTooltipBubble(app: any, options = {}) {
   return texture;
 }
 
-export default function Customer({ x, y }: any) {
+export default function Customer({ position, x, y }: any) {
   useExtend({ LayoutContainer });
   const { app } = useApplication();
+  const {
+    customers,
+    cafeStocks,
+    loadCustomers,
+    loadCafeStocks,
+    loadCafeBalance,
+    pushServeAnimates,
+  } = CafeGameStore();
+  const customer = customers.find((c) => c.position === position);
+  const [earned, setEarned] = useState(0);
 
-  const customerTexture = useMemo(
-    () => Assets.get(`cust-${randomFromArray(CUSTOMER_AVATARS)}`),
-    []
-  );
-  const toastTexture = Assets.get(`blook-toast`);
-  const foodCount = 3;
+  const appWidth = app.screen.width;
 
-  const custAvatarRef = useRef<Sprite>(null);
-  const foods = Array.from({ length: foodCount }, () => {
-    return toastTexture;
-  });
-  const chatBubbleTexture = createTooltipBubble(app);
+  const customerTexture = Assets.get(`cust-${customer?.avatar}`);
+  const foodCount = customer?.orders.length || 2;
+  const [served, setServed] = useState(false);
 
-  useEffect(() => {}, []);
+  const custAvatarRef = useRef<Sprite>(new Sprite(Texture.EMPTY));
+  const custFoodRef = useRef<Container>(new Container());
+  const custRef = useRef<Container>(new Container());
+  const orders = customer?.orders || [];
+  const chatBubbleTexture = createTooltipBubble(app, { foodCount });
+
+  useEffect(() => {
+    custRef.current.on("pointerup", () => {
+      // setServed(true);
+      if (!customer) {
+        return;
+      }
+      const gameController = getCafeControllerInstance();
+      const serveResult = gameController.serve(customer?.id);
+
+      loadCafeStocks();
+      pushServeAnimates(
+        serveResult.servedItems.map((item) => {
+          return {
+            ...item,
+            position: custAvatarRef.current.getGlobalPosition(),
+          };
+        })
+      );
+
+      if (serveResult.servedAll) {
+        setEarned(serveResult.totalEarned || 0);
+        setServed(true);
+        loadCafeBalance();
+      }
+    });
+  }, [customers.find((c) => c.position == position)?.id]);
+
+  useEffect(() => {
+    if (!customer?.firstLoad) {
+      gsap.fromTo(
+        custAvatarRef.current,
+        { x: 0 - AVATAR_WIDTH * 2 },
+        {
+          x: x - 130 / 2,
+          duration: 0.5,
+        }
+      );
+      gsap.fromTo(
+        custFoodRef.current.scale,
+        { x: 0, y: 0 },
+        {
+          x: 1,
+          y: 1,
+          delay: 0.2,
+          duration: 0.3,
+        }
+      );
+      const gameController = getCafeControllerInstance();
+      gameController.setFirstLoad(customer?.id, true);
+    }
+  }, [customers.find((c) => c.position == position)?.id]);
+
+  useEffect(() => {
+    if (served) {
+      const custAvatar = custAvatarRef.current;
+      gsap.fromTo(
+        custAvatar,
+        { y: custAvatar.y - 10 },
+        {
+          y: custAvatar.y + 10,
+          duration: 0.07,
+          repeat: 4,
+          yoyo: true,
+          onComplete: () => {
+            gsap.to(custFoodRef.current.scale, {
+              x: 0,
+              y: 0,
+              duration: 0,
+            });
+            gsap.to(custAvatar, {
+              x: appWidth + 200,
+              y: y + 10,
+            });
+
+            setTimeout(() => {
+              const gameController = getCafeControllerInstance();
+              gameController.removeCustomerByPosition(position);
+              loadCustomers();
+              setServed(false);
+            }, 1500);
+          },
+        }
+      );
+    }
+  }, [served]);
 
   return (
-    <pixiContainer>
+    <pixiContainer
+      interactive={true}
+      label="Customer cafe-game"
+      cursor="pointer"
+      ref={custRef}
+    >
       <pixiSprite
         ref={custAvatarRef}
         anchor={{ x: 0.5, y: 1 }}
-        width={130}
-        height={150}
+        width={AVATAR_WIDTH}
+        height={AVATAR_HEIGHT}
         x={x - 130 / 2}
+        // y={y + 10}
+        // x={0 - AVATAR_WIDTH}
         y={y + 10}
         texture={customerTexture}
       />
-      <pixiSprite
-        anchor={{ x: 0, y: 1 }}
+      <pixiContainer
         x={x - 10}
         y={y - 30}
-        texture={chatBubbleTexture}
-      />
-      <layoutContainer
-        x={x + 20}
-        y={y - 200 - 32}
-        layout={{
-          height: 200,
-          width: 100,
-          justifyContent: "space-between",
-          flexDirection: "column",
-          gap: 10,
-          paddingTop: 10,
-          paddingBottom: 10,
-        }}
+        pivot={{ x: 0, y: 0.5 }}
+        ref={custFoodRef}
       >
-        {foods.map((food, index) => {
-          return (
-            <pixiSprite
-              layout={{ height: "intrinsic", aspectRatio: 1 }}
-              texture={food}
-              key={index}
+        <pixiSprite anchor={{ x: 0, y: 1 }} texture={chatBubbleTexture} />
+        <pixiContainer x={30} y={(-FOOD_SIZE - 15) * foodCount}>
+          <RenderIf condition={!served}>
+            {orders.map((order, index) => {
+              const foodTexture = Assets.get(
+                `${cafeStocks.find((s) => s.id === order.stockId)?.image}`
+              );
+              const quantity = order.quantity;
+              return (
+                <pixiContainer key={index} y={index * (FOOD_SIZE + 10 + 5)}>
+                  <pixiSprite
+                    layout={false}
+                    height={FOOD_SIZE}
+                    width={FOOD_SIZE}
+                    texture={foodTexture}
+                  />
+                  <pixiText
+                    text={"x"}
+                    x={FOOD_SIZE + 10}
+                    y={10}
+                    style={{ fontSize: TEXT_SIZE - 10 }}
+                  />
+                  <pixiText
+                    text={quantity}
+                    x={FOOD_SIZE + 40}
+                    style={{ fontSize: TEXT_SIZE }}
+                  />
+                </pixiContainer>
+              );
+            })}
+          </RenderIf>
+
+          <RenderIf condition={served}>
+            <pixiText
+              text={"Thanks!"}
+              anchor={{ x: 0.5, y: 0.5 }}
+              x={68}
+              y={(FOOD_SIZE * foodCount) / 2 - 15}
+              style={{ fontSize: 30 }}
             />
-          );
-        })}
-      </layoutContainer>
+            <pixiText
+              text={`$${earned}`}
+              anchor={{ x: 0.5, y: 0.5 }}
+              x={68}
+              y={(FOOD_SIZE * foodCount) / 2 - 15 + 30}
+              style={{ fontSize: 27 }}
+            />
+          </RenderIf>
+        </pixiContainer>
+      </pixiContainer>
     </pixiContainer>
   );
 }

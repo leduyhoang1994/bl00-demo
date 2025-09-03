@@ -2,11 +2,12 @@ import CongraEffect from "@/effects/congra";
 import QuizStore from "@/stores/quiz-store/quiz-store";
 import { useApplication, useExtend } from "@pixi/react";
 import gsap from "gsap";
-import { Graphics, TextStyle, Text, Container } from "pixi.js";
-import { useEffect, useRef } from "react";
+import { Graphics, TextStyle, Text, Container, Texture, Sprite } from "pixi.js";
+import { useEffect, useMemo, useRef, useState } from "react";
 import AnswerBtn from "./answer-btn";
 import { getCafeControllerInstance } from "@/helpers/cafeController.singleton";
 import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";
+import RenderIf from "@/utils/condition-render";
 
 export default function QuizLayout() {
   useExtend({ Graphics, Text });
@@ -15,17 +16,21 @@ export default function QuizLayout() {
     toggleQuizContainer,
     setShowCongraEffect,
     showCongraEffect,
-    setAnswerQuiz
+    setAnswerQuiz,
+    answerQuiz,
+    currentQuestion,
   } = QuizStore();
   const { loadCafeStocks } = CafeGameStore();
+  const { setIsCorrect, setAnsweredId } = QuizStore();
   const { app } = useApplication();
   const cafeController = getCafeControllerInstance();
-  const questionData = cafeController.getQuestion();
-  const question = questionData.text;
-  const answers = questionData.answers;
+  const question = currentQuestion?.text;
+  const answers = currentQuestion?.answers;
   const appWidth = app.screen.width;
   const appHeight = app.screen.height;
   const quizContainer = useRef<Container>(null);
+  const blockAnswer = useRef<Sprite>(new Sprite());
+  const [allowCloseBlock, setAllowCloseBlock] = useState(false);
 
   const headerHeight = appHeight / 15;
   const shadowHeight = 6;
@@ -77,19 +82,20 @@ export default function QuizLayout() {
 
   const doClickAnswser = (answerId: any) => {
     setAnswerQuiz(true);
-    setTimeout(() => {
-      setAnswerQuiz(false);
-      setToggleQuizContainer(false);
-      setShowCongraEffect(false);
-      loadCafeStocks();
-    }, 2000);
-    const userAnswer = cafeController.answerQuestion(answerId)
-    console.log('userAnswer', userAnswer);
+    const userAnswer = cafeController.answerQuestion(answerId);
+    setAnsweredId(answerId);
+    setIsCorrect(userAnswer.correct);
 
     if (!userAnswer.correct) {
-      return
+      setAllowCloseBlock(false);
+      setTimeout(() => {
+        setAllowCloseBlock(true);
+      }, 2000);
+      return;
     }
+    setAllowCloseBlock(true);
     setShowCongraEffect(true);
+    loadCafeStocks();
   };
 
   useEffect(() => {
@@ -101,6 +107,17 @@ export default function QuizLayout() {
       { scale: 1, duration: 0.2, ease: "none" }
     );
   }, [toggleQuizContainer]);
+
+  useEffect(() => {
+    if (answerQuiz && blockAnswer.current && allowCloseBlock) {
+      blockAnswer.current.off("pointerup");
+      blockAnswer.current.on("pointerup", () => {
+        setToggleQuizContainer(false);
+        setAnswerQuiz(false);
+        setShowCongraEffect(false);
+      });
+    }
+  }, [answerQuiz, allowCloseBlock]);
 
   if (!toggleQuizContainer) {
     return null;
@@ -128,19 +145,37 @@ export default function QuizLayout() {
           y={bodyHeight / 2}
           resolution={2}
         />
+        <RenderIf condition={answerQuiz}>
+          <RenderIf condition={allowCloseBlock}>
+            <pixiText
+              text={"Click anywhere to continue !"}
+              anchor={0.5}
+              x={appWidth / 2}
+              y={bodyHeight - 40}
+            />
+          </RenderIf>
+          <RenderIf condition={!allowCloseBlock}>
+            <pixiText
+              text={"Wait for the abandon time to continue."}
+              anchor={0.5}
+              x={appWidth / 2}
+              y={bodyHeight - 40}
+            />
+          </RenderIf>
+        </RenderIf>
       </pixiContainer>
 
       <pixiContainer label="Answer quiz layout" x={gap} y={answerContainerY}>
-        {answers.map((answer, i) => {
+        {answers?.map((answer, i) => {
           const col = i % 2;
           const row = Math.floor(i / 2);
           const x = col * (boxWidth + gap);
           const y = row * (boxHeight + gap);
           const text = answer.text;
-          const asnwerId = answer.id;
+          const answerId = answer.id;
           return (
             <AnswerBtn
-              asnwerId={asnwerId}
+              answerId={answerId}
               text={text}
               key={i}
               i={i}
@@ -158,6 +193,17 @@ export default function QuizLayout() {
         })}
       </pixiContainer>
       {showCongraEffect && <CongraEffect />}
+      <RenderIf condition={answerQuiz}>
+        <pixiSprite
+          ref={blockAnswer}
+          width={appWidth}
+          height={appHeight}
+          texture={Texture.EMPTY}
+          interactive={allowCloseBlock}
+          eventMode="static"
+          cursor={allowCloseBlock ? "pointer" : "default"}
+        />
+      </RenderIf>
     </pixiContainer>
   );
 }

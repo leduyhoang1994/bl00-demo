@@ -18,14 +18,12 @@ export default function ShopContainer() {
   const buttonWidth = appWidth / 4;
 
   const doClickToggleAbilitesAndShop = () => {
-    console.log('doClickToggleAbilitesAndShop');
     setToggleAbilitiShop(!toggleAbilitiShop);
     loadCafeAbilities();
     loadCafeShopItems();
   }
 
   const doClickExitShop = () => {
-    console.log('doClickExitShop');
     setToggleAbilitiShop(false);
     setToggleVisitShop(false);
   }

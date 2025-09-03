@@ -11,11 +11,10 @@ import PlateComponent from "./plate-component";
 
 export default function TableContainer() {
   useExtend({ Sprite, TilingSprite });
-  const { setToggleQuizContainer } = QuizStore();
-  const { setToggleVisitShop, cafeStocks } = CafeGameStore();
+  const { setToggleQuizContainer, loadNewQuestion } = QuizStore();
+  const { setToggleVisitShop, cafeStocks, loadCafeShopItems } = CafeGameStore();
   const { app } = useApplication();
   const plateContainer = useRef<Container>(new Container());
-  console.log('cafeStocks', cafeStocks);
 
   const appHeight = app.screen.height;
   const appWidth = app.screen.width;
@@ -31,12 +30,12 @@ export default function TableContainer() {
   const buttonWidth = buttonContainerWidth / 2.5;
 
   const doClickRestockFood = () => {
+    loadNewQuestion();
     setToggleQuizContainer(true);
-    console.log("doClickRestockFood");
   };
 
   const doClickVisitShop = () => {
-    console.log("doClickVisitShop");
+    loadCafeShopItems();
     setToggleVisitShop(true);
   };
 
@@ -88,6 +87,11 @@ export default function TableContainer() {
               x={x}
               y={y}
               textureItem={image}
+              plateData={plateData}
+              globPos={{
+                x: plateContainer.current.getGlobalPosition().x + x,
+                y: plateContainer.current.getGlobalPosition().y + y,
+              }}
             />
           );
         })}

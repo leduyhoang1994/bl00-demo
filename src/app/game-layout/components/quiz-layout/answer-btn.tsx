@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { Graphics, TextStyle } from "pixi.js";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { darken } from "../../../../helpers/color";
 import QuizStore from "@/stores/quiz-store/quiz-store";
 
@@ -13,8 +13,8 @@ export default function AnswerBtn({
   colors,
   baseStyle,
   doClickAnswser,
-  asnwerId,
-  text
+  answerId,
+  text,
 }: {
   i: number;
   x: number;
@@ -26,21 +26,34 @@ export default function AnswerBtn({
   colors: string[];
   baseStyle: any;
   doClickAnswser: (answer: string | number) => void;
-  asnwerId?: any,
-  text?: string | number
+  answerId?: any;
+  text?: string | number;
 }) {
   const answerBorderRadius = 5;
   const textStyleAnswer = new TextStyle({ ...baseStyle, fill: "white" });
   const btnGraphics = useRef<Graphics>(new Graphics());
 
-  const { answerQuiz } = QuizStore();
+  const { answerQuiz, isCorrect, answeredId } = QuizStore();
+  const [color, setColor] = useState(colors[i]);
+
+  useEffect(() => {
+    if (!answerQuiz) {
+      return;
+    }
+
+    if (answerId === answeredId) {
+      setColor(isCorrect ? "#00CF77" : "#FF3B30");
+    } else {
+      setColor("#8E8E93");
+    }
+  }, [answerId, answeredId, isCorrect, answerQuiz]);
 
   const defaultActive = {
     interactive: true,
     eventMode: "static",
     cursor: "pointer",
-  }
-  const activeObj = answerQuiz ? {} : defaultActive
+  };
+  const activeObj = answerQuiz ? {} : defaultActive;
 
   const drawBoxAnswer = (g: Graphics, colorBoxAnswer: string) => {
     g.clear();
@@ -93,21 +106,23 @@ export default function AnswerBtn({
 
     btnGraphics.current.on("pointerup", () => {
       const gr = btnGraphics.current;
-      gsap.to(gr, {
-        y: 0,
-        duration: 0.05,
-      }).then(() => {
-        doClickAnswser(asnwerId);
-      });
+      gsap
+        .to(gr, {
+          y: 0,
+          duration: 0.05,
+        })
+        .then(() => {
+          doClickAnswser(answerId);
+        });
     });
   });
 
   return (
-    <pixiContainer key={i} x={x} y={y}>
-      <pixiGraphics draw={(g) => drawShadown(g, colors[i])} />
+    <pixiContainer x={x} y={y}>
+      <pixiGraphics draw={(g) => drawShadown(g, color)} />
       <pixiGraphics
         ref={btnGraphics}
-        draw={(g) => drawBoxAnswer(g, colors[i])}
+        draw={(g) => drawBoxAnswer(g, color)}
         {...activeObj}
       />
       <pixiText

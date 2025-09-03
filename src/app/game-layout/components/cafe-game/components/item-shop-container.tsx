@@ -86,7 +86,6 @@ const ItemShopContainer = ({
   );
 
   const doClickBuyItem = () => {
-    console.log('doClickBuyItem', id);
     if (type == ItemType.SHOP) {
       cafeController.buyShopItem(String(id));
       loadCafeShopItems();
@@ -139,7 +138,7 @@ const ItemShopContainer = ({
               resolution={2}
             />
             <pixiText
-              text={type == ItemType.SHOP ? `$${description}` : description}
+              text={description}
               layout={{
                 marginTop: 0,
                 objectFit: 'contain',

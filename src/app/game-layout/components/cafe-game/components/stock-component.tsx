@@ -1,18 +1,17 @@
 import RenderIf from "@/utils/condition-render";
 import { useExtend } from "@pixi/react";
-import { Assets, Graphics } from "pixi.js";
+import { Assets, Graphics, Sprite, Texture } from "pixi.js";
+import { useRef } from "react";
 
 export default function StockComponent({
   plateWidth = 100,
   plateHeight = 100,
   itemHeight = 120,
-  textureItem = Assets.get('blook-toast') as import("pixi.js").Texture,
-  i = 0,
+  textureItem = Assets.get("blook-toast") as Texture,
   quantity = 0,
-  doClickPlate = (i: number) => { },
 }) {
   useExtend({ Graphics });
-  const texturePlateActive = Assets.get('plate-active');
+  const texturePlateActive = Assets.get("plate-active");
   const text = `${quantity}`;
   const fontSize = 14;
   const paddingX = 3;
@@ -24,46 +23,51 @@ export default function StockComponent({
     interactive: true,
     eventMode: "static",
     cursor: "pointer",
-    onClick: () => doClickPlate(i)
-  }
+  };
 
   const activeObj = quantity > 0 ? defaultActive : {};
+  const foodRef = useRef<Sprite>(null);
 
   const draw = (g: Graphics) => {
     g.clear();
     g.roundRect(0, 0, boxWidth, boxHeight, 5).fill({
-      color: '#099faa',
+      color: "#099faa",
     });
-  }
+  };
 
   return (
     <>
-      <layoutContainer layout={{
-        position: "absolute",
-        width: plateWidth,
-        height: plateHeight,
-        left: -20,
-        top: (itemHeight - plateHeight) / 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
+      <layoutContainer
+        layout={{
+          position: "absolute",
+          width: plateWidth,
+          height: plateHeight,
+          left: -20,
+          top: (itemHeight - plateHeight) / 2,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
-        <pixiSprite texture={texturePlateActive}
+        <pixiSprite
+          ref={foodRef}
+          texture={texturePlateActive}
           layout={{
             width: "100%",
-            height: "100%"
+            height: "100%",
           }}
         />
         <RenderIf condition={quantity > 0}>
-          <pixiSprite texture={textureItem}
+          <pixiSprite
+            texture={textureItem}
             rotation={0}
             layout={{
               width: "65%",
-              height: '70%',
+              height: "70%",
               position: "absolute",
               marginBottom: 5,
-              marginLeft: 0
-            }} />
+              marginLeft: 0,
+            }}
+          />
         </RenderIf>
         <pixiContainer x={100} y={90}>
           <pixiGraphics draw={draw} />
@@ -72,7 +76,7 @@ export default function StockComponent({
             style={{
               fontSize: 14,
               fontWeight: "700",
-              fill: 'white',
+              fill: "white",
             }}
             anchor={0.5}
             resolution={2}
@@ -83,11 +87,14 @@ export default function StockComponent({
         <pixiGraphics
           draw={(g) => {
             g.clear();
-            g.roundRect(0, 0, plateWidth, plateHeight).fill({ color: "0x000000", alpha: 0 });
+            g.roundRect(0, 0, plateWidth, plateHeight).fill({
+              color: "0x000000",
+              alpha: 0,
+            });
           }}
           {...activeObj}
         />
       </layoutContainer>
     </>
-  )
+  );
 }

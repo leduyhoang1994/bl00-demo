@@ -35,6 +35,8 @@ export interface Customer {
   avatar: string;
   avatarId: number;
   orders: OrderItem[];
+  position: number;
+  firstLoad: boolean;
 }
 
 export interface Ability {
@@ -54,10 +56,9 @@ export const STOCKS = [
     quantity: 0,
     enabled: true,
     currentIndexLevel: 0,
-    sellPrices: [300, 5250, 42500, 130000, 600000], // để default giá mua là 300 ( level 1 luôn )
-    rewardPrices: [53, 525, 1750, 3500, 10000],
+    sellPrices: [0, 300, 5250, 42500, 130000, 600000], // để default giá mua là 300 ( level 1 luôn )
+    rewardPrices: [2, 53, 525, 1750, 3500, 10000],
     image: 'blook-toast',
-    isDefaultSell: true,
   },
   {
     id: 's2',
@@ -65,8 +66,8 @@ export const STOCKS = [
     quantity: 0,
     enabled: false,
     currentIndexLevel: 0,
-    sellPrices: [5, 1500, 16250, 212500, 650000],
-    rewardPrices: [18, 263, 2625, 8750, 17500],
+    sellPrices: [0, 5, 1500, 16250, 212500, 650000],
+    rewardPrices: [0, 18, 263, 2625, 8750, 17500],
     image: 'blook-cereal'
   },
   {
@@ -75,8 +76,8 @@ export const STOCKS = [
     quantity: 0,
     enabled: false,
     currentIndexLevel: 0,
-    sellPrices: [10, 4500, 78750, 637500, 1950000],
-    rewardPrices: [53, 788, 7875, 26250, 52500],
+    sellPrices: [0, 10, 4500, 78750, 637500, 1950000],
+    rewardPrices: [0, 53, 788, 7875, 26250, 52500],
     image: 'blook-yogurt'
   },
   {
@@ -85,8 +86,8 @@ export const STOCKS = [
     quantity: 0,
     enabled: false,
     currentIndexLevel: 0,
-    sellPrices: [50, 9000, 157500, 1275000, 3900000],
-    rewardPrices: [105, 1575, 15750, 52500, 105000],
+    sellPrices: [0, 50, 9000, 157500, 1275000, 3900000],
+    rewardPrices: [0, 105, 1575, 15750, 52500, 105000],
     image: 'blook-breakfast'
   },
   {
@@ -95,8 +96,8 @@ export const STOCKS = [
     quantity: 0,
     enabled: false,
     currentIndexLevel: 0,
-    sellPrices: [200, 15000, 262500, 2125000, 6500000],
-    rewardPrices: [175, 2625, 26250, 87500, 175000],
+    sellPrices: [0, 200, 15000, 262500, 2125000, 6500000],
+    rewardPrices: [0, 175, 2625, 26250, 87500, 175000],
     image: 'blook-orange-carton'
   },
   {
@@ -105,8 +106,8 @@ export const STOCKS = [
     quantity: 0,
     enabled: false,
     currentIndexLevel: 0,
-    sellPrices: [500, 22500, 393750, 3187500, 9750000],
-    rewardPrices: [263, 3938, 39375, 131250, 262500],
+    sellPrices: [0, 500, 22500, 393750, 3187500, 9750000],
+    rewardPrices: [0, 263, 3938, 39375, 131250, 262500],
     image: 'blook-milk-carton'
   },
   {
@@ -115,8 +116,8 @@ export const STOCKS = [
     quantity: 0,
     enabled: false,
     currentIndexLevel: 0,
-    sellPrices: [2000, 31500, 551250, 4462500, 13650000],
-    rewardPrices: [368, 5513, 55125, 183750, 367500],
+    sellPrices: [0, 2000, 31500, 551250, 4462500, 13650000],
+    rewardPrices: [0, 368, 5513, 55125, 183750, 367500],
     image: 'blook-waffle'
   },
   {
@@ -125,8 +126,8 @@ export const STOCKS = [
     quantity: 0,
     enabled: false,
     currentIndexLevel: 0,
-    sellPrices: [5000, 420000, 735000, 5950000, 18200000],
-    rewardPrices: [490, 7350, 245000, 490000],
+    sellPrices: [0, 5000, 420000, 735000, 5950000, 18200000],
+    rewardPrices: [0, 490, 7350, 245000, 490000],
     image: 'blook-pancake'
   },
   {
@@ -135,8 +136,8 @@ export const STOCKS = [
     quantity: 0,
     enabled: false,
     currentIndexLevel: 0,
-    sellPrices: [7500, 54000, 2945000, 7650000, 23400000],
-    rewardPrices: [630, 9450, 94500, 315000, 630000],
+    sellPrices: [0, 7500, 54000, 2945000, 7650000, 23400000],
+    rewardPrices: [0, 630, 9450, 94500, 315000, 630000],
     image: 'blook-french-waffle'
   },
 ];
