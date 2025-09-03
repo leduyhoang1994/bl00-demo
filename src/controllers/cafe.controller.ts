@@ -15,6 +15,12 @@ const AVATARS_CUSTOMER = [
   '/images/cafe-game/customers/puppy.svg',
   '/images/cafe-game/customers/toucan.svg',
   '/images/cafe-game/customers/walrus.svg',
+  '/images/cafe-game/customers/goldfish.svg',
+  '/images/cafe-game/customers/moose.svg',
+  '/images/cafe-game/customers/orangutan.svg',
+  '/images/cafe-game/customers/penguin.svg',
+  '/images/cafe-game/customers/pig.svg',
+  '/images/cafe-game/customers/rhino.svg',
 ]
 
 export interface CafeControllerInterface {
@@ -108,10 +114,12 @@ export default class CafeController implements CafeControllerInterface {
       // @ts-expect-error
       const stock: Stock = this.stocks.find((s) => s.id === item.stockId);
 
+      const isMaxLevel = stock.currentIndexLevel == INDEX_MAX_LEVEL
+
       const priceToSell = stock.sellPrices[stock.currentIndexLevel] // giá cần có dể mua được
       return {
         ...item,
-        enabled: stock ? this.balance >= priceToSell : false,
+        enabled: (stock && !isMaxLevel) ? this.balance >= priceToSell : false,
       };
     });
   }
@@ -179,11 +187,16 @@ export default class CafeController implements CafeControllerInterface {
       const food = shuffled[i];
       orders.push({ stockId: food.id, quantity: randomFromArray([1, 2, 3]) });
     }
+    const cIndex =  new Date().getTime()
+
+    const avatarId = this.genAvatarId()
+
     const customerNew = {
-      id: 'c_' + Math.random().toString(36).substring(2, 9),
-      name: 'Customer ' + Math.floor(Math.random() * 100),
+      id: cIndex.toString(),
+      name: 'Customer ' + cIndex,
       orders,
-      avatar: AVATARS_CUSTOMER[Math.floor(Math.random() * AVATARS_CUSTOMER.length)]
+      avatar: AVATARS_CUSTOMER[avatarId],
+      avatarId: avatarId
     };
     this.customers.push(customerNew);
 
@@ -312,5 +325,13 @@ export default class CafeController implements CafeControllerInterface {
     }
 
     return { success: true, message: `${ability.name} purchased!` };
+  }
+  genAvatarId(): any{
+    const avatarID = Math.floor(Math.random() * AVATARS_CUSTOMER.length)
+    const avatarExist = this.customers.find(c => c.avatarId == avatarID)
+    return avatarExist ? this.genAvatarId() : avatarID
+  }
+  getCustomers(){
+      return this.customers
   }
 }

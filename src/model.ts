@@ -33,6 +33,7 @@ export interface Customer {
   id: string;
   name: string;
   avatar: string;
+  avatarId: number;
   orders: OrderItem[];
 }
 
@@ -155,20 +156,20 @@ export const QUESTIONS = [
 ];
 
 export const ABILITIES = [
-  {
-    id: 1,
-    name: 'Paycheck Bonus',
-    description: 'Give a player +25% of their balance',
-    price: 500,
-    enabled: false,
-    purchased: false,
-    isActive: false,
-    image: 'abilities-paycheck'
-  },
+  // {
+  //   id: 1,
+  //   name: 'Paycheck Bonus',
+  //   description: 'Give a player +25% of their balance',
+  //   price: 500,
+  //   enabled: false,
+  //   purchased: false,
+  //   isActive: false,
+  //   image: 'abilities-paycheck'
+  // },
   {
     id: 2,
     name: 'Supply Crate',
-    description: ' +25% of their balance+7 stock of all your foods',
+    description: '+7 stock all of your foods',
     price: 1000,
     enabled: false,
     purchased: false,
@@ -185,36 +186,36 @@ export const ABILITIES = [
     isActive: true,
     image: 'abilities-happy'
   },
-  {
-    id: 4,
-    name: 'Trash the Food',
-    description: 'Lower a players food stocks by 3 each',
-    price: 5000,
-    enabled: false,
-    purchased: false,
-    isActive: false,
-    image: 'abilites-trash'
-  },
-  {
-    id: 5,
-    name: 'TAXES!',
-    description: 'Reduce a players balance by 25%',
-    price: 7500,
-    enabled: false,
-    purchased: false,
-    isActive: false,
-    image: 'abilites-taxes'
-  },
-  {
-    id: 6,
-    name: 'Health Inspection',
-    description: 'Force a player to get a 12s',
-    price: 10000,
-    enabled: false,
-    purchased: false,
-    isActive: false,
-    image: 'abilites-health'
-  },
+  // {
+  //   id: 4,
+  //   name: 'Trash the Food',
+  //   description: 'Lower a players food stocks by 3 each',
+  //   price: 5000,
+  //   enabled: false,
+  //   purchased: false,
+  //   isActive: false,
+  //   image: 'abilites-trash'
+  // },
+  // {
+  //   id: 5,
+  //   name: 'TAXES!',
+  //   description: 'Reduce a players balance by 25%',
+  //   price: 7500,
+  //   enabled: false,
+  //   purchased: false,
+  //   isActive: false,
+  //   image: 'abilites-taxes'
+  // },
+  // {
+  //   id: 6,
+  //   name: 'Health Inspection',
+  //   description: 'Force a player to get a 12s',
+  //   price: 10000,
+  //   enabled: false,
+  //   purchased: false,
+  //   isActive: false,
+  //   image: 'abilites-health'
+  // },
   {
     id: 7,
     name: 'Run It Back',
