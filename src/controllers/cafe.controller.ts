@@ -104,7 +104,14 @@ export default class CafeController implements CafeControllerInterface {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       const stock: Stock = this.stocks.find((s) => s.id === item.stockId);
-      const priceToSell = stock.sellPrices[stock.currentIndexLevel] // giá cần có dể mua được
+
+      let level = stock.currentIndexLevel
+
+      if(stock.isDefaultSell && level == 0){
+        level += 1;
+      }
+
+      const priceToSell = stock.sellPrices[level] // giá cần có dể mua được
       return {
         ...item,
         enabled: stock ? this.balance >= priceToSell : false,
