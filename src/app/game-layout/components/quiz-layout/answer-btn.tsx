@@ -10,9 +10,10 @@ export default function AnswerBtn({
   boxWidth,
   boxHeight,
   colors,
-  labels,
   baseStyle,
   doClickAnswser,
+  asnwerId,
+  text
 }: {
   i: number;
   x: number;
@@ -22,9 +23,10 @@ export default function AnswerBtn({
   shadowHeight: number;
   shadowObj: any;
   colors: string[];
-  labels: string[];
   baseStyle: any;
-  doClickAnswser: (answer: string) => void;
+  doClickAnswser: (answer: string | number) => void;
+  asnwerId?: any,
+  text?: string | number
 }) {
   const answerBorderRadius = 5;
   const textStyleAnswer = new TextStyle({ ...baseStyle, fill: "white" });
@@ -85,7 +87,7 @@ export default function AnswerBtn({
         y: 0,
         duration: 0.05,
       }).then(() => {
-        doClickAnswser(labels[i]);
+        doClickAnswser(asnwerId);
       });
     });
   });
@@ -100,7 +102,7 @@ export default function AnswerBtn({
         cursor="pointer"
       />
       <pixiText
-        text={labels[i]}
+        text={text}
         style={textStyleAnswer}
         anchor={0.5}
         x={boxWidth / 2}

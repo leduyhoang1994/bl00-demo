@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { Graphics, TextStyle, Text, Container } from "pixi.js";
 import { useEffect, useRef } from "react";
 import AnswerBtn from "./answer-btn";
+import { getCafeControllerInstance } from "@/helpers/cafeController.singleton";
 
 export default function QuizLayout() {
   useExtend({ Graphics, Text });
@@ -15,8 +16,14 @@ export default function QuizLayout() {
     showCongraEffect,
   } = QuizStore();
   const { app } = useApplication();
-  const appWidth = app.view.width;
-  const appHeight = app.view.height;
+  const cafeController = getCafeControllerInstance();
+  console.log(123, cafeController.getQuestion());
+  const questionData = cafeController.getQuestion();
+  const question = questionData.text;
+  const answers = questionData.answers;
+  const correctAnswer = questionData.correctAnswerId;
+  const appWidth = app.screen.width;
+  const appHeight = app.screen.height;
   const quizContainer = useRef<Container>(null);
 
   const headerHeight = appHeight / 15;
@@ -48,7 +55,6 @@ export default function QuizLayout() {
   const textStyleQuestion = new TextStyle({ ...baseStyle, fill: "black" });
 
   const colors = ["#FFA31E", "#3378FF", "#00CF77", "#FF462B"];
-  const labels = ["a", "b", "c", "d"];
 
   const drawBackground = (g: Graphics) => {
     g.clear();
@@ -68,10 +74,13 @@ export default function QuizLayout() {
     g.roundRect(0, 0, appWidth, bodyHeight, 0).fill({ color: "white" });
   };
 
-  const doClickAnswser = (label: string) => {
-    setShowCongraEffect(true);
-    console.log(label);
+  const doClickAnswser = (answerId: any) => {
+    console.log(answerId);
 
+    if (answerId != correctAnswer) {
+      return
+    }
+    setShowCongraEffect(true);
     if (showCongraEffect) {
       setShowCongraEffect(false);
       setToggleQuizContainer(false);
@@ -107,9 +116,7 @@ export default function QuizLayout() {
       <pixiContainer label="body quiz layout" x={0} y={headerHeight}>
         <pixiGraphics draw={drawBody} />
         <pixiText
-          text={
-            "ĐÂY LÀ CÂU HỎI ĐÂY LÀ CÂU HỎI ĐÂY LÀ CÂU HỎI ĐÂY LÀ CÂU HỎI ĐÂY LÀ CÂU HỎI"
-          }
+          text={question}
           style={textStyleQuestion}
           anchor={0.5}
           x={appWidth / 2}
@@ -119,14 +126,17 @@ export default function QuizLayout() {
       </pixiContainer>
 
       <pixiContainer label="Answer quiz layout" x={gap} y={answerContainerY}>
-        {[...Array(4)].map((_, i) => {
+        {answers.map((answer, i) => {
           const col = i % 2;
           const row = Math.floor(i / 2);
           const x = col * (boxWidth + gap);
           const y = row * (boxHeight + gap);
-
+          const text = answer.text;
+          const asnwerId = answer.id;
           return (
             <AnswerBtn
+              asnwerId={asnwerId}
+              text={text}
               key={i}
               i={i}
               x={x}
@@ -134,7 +144,6 @@ export default function QuizLayout() {
               boxWidth={boxWidth}
               boxHeight={boxHeight}
               colors={colors}
-              labels={labels}
               shadowHeight={shadowHeight}
               shadowObj={shadowObj}
               baseStyle={baseStyle}
