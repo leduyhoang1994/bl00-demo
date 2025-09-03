@@ -30,7 +30,7 @@ const ItemShopContainer = ({
   type = ItemType.SHOP
 }) => {
   useExtend({ LayoutContainer, Sprite, Graphics });
-  const { loadCafeBalance, loadCafeAbilities, loadCafeShopItems } = CafeGameStore();
+  const { loadCafeBalance, loadCafeAbilities, loadCafeShopItems, loadCafeStocks } = CafeGameStore();
   const texturePlateActive = Assets.get('plate-active');
   const textureItem = Assets.get(image);
   const borderColor = enabled ? '#0e6b71' : '#4d4d4d';
@@ -49,6 +49,7 @@ const ItemShopContainer = ({
     cursor: "pointer",
     onClick: () => doClickBuyItem()
   }
+  console.log('description', description);
 
   const activeObj = enabled ? defaultActive : {};
 
@@ -95,7 +96,7 @@ const ItemShopContainer = ({
       cafeController.buyAbilityItem(id);
       loadCafeAbilities();
     }
-
+    loadCafeStocks();
     loadCafeBalance();
   }
 
@@ -139,7 +140,7 @@ const ItemShopContainer = ({
               resolution={2}
             />
             <pixiText
-              text={description}
+              text={type == ItemType.SHOP ? `$${description}` : description}
               layout={{
                 marginTop: 0,
                 objectFit: 'contain',

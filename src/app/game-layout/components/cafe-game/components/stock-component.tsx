@@ -1,3 +1,4 @@
+import RenderIf from "@/utils/condition-render";
 import { useExtend } from "@pixi/react";
 import { Assets, Graphics } from "pixi.js";
 
@@ -7,7 +8,7 @@ export default function StockComponent({
   itemHeight = 120,
   textureItem = Assets.get('blook-toast') as import("pixi.js").Texture,
   i = 0,
-  quantity = 10,
+  quantity = 0,
   doClickPlate = (i: number) => { },
 }) {
   useExtend({ Graphics });
@@ -18,6 +19,15 @@ export default function StockComponent({
   const textWidth = text.length * (fontSize * 0.6);
   const boxWidth = textWidth + paddingX * 2;
   const boxHeight = 20;
+
+  const defaultActive = {
+    interactive: true,
+    eventMode: "static",
+    cursor: "pointer",
+    onClick: () => doClickPlate(i)
+  }
+
+  const activeObj = quantity > 0 ? defaultActive : {};
 
   const draw = (g: Graphics) => {
     g.clear();
@@ -37,26 +47,24 @@ export default function StockComponent({
         justifyContent: 'center',
         alignItems: 'center',
       }}
-        onClick={() => doClickPlate(i)}
       >
         <pixiSprite texture={texturePlateActive}
           layout={{
             width: "100%",
             height: "100%"
           }}
-          interactive={true}
-          eventMode="static"
-          cursor="pointer"
         />
-        <pixiSprite texture={textureItem}
-          rotation={0}
-          layout={{
-            width: "65%",
-            height: '70%',
-            position: "absolute",
-            marginBottom: 5,
-            marginLeft: 0
-          }} />
+        <RenderIf condition={quantity > 0}>
+          <pixiSprite texture={textureItem}
+            rotation={0}
+            layout={{
+              width: "65%",
+              height: '70%',
+              position: "absolute",
+              marginBottom: 5,
+              marginLeft: 0
+            }} />
+        </RenderIf>
         <pixiContainer x={100} y={90}>
           <pixiGraphics draw={draw} />
           <pixiText
@@ -72,6 +80,13 @@ export default function StockComponent({
             y={boxHeight / 2}
           />
         </pixiContainer>
+        <pixiGraphics
+          draw={(g) => {
+            g.clear();
+            g.roundRect(0, 0, plateWidth, plateHeight).fill({ color: "0x000000", alpha: 0 });
+          }}
+          {...activeObj}
+        />
       </layoutContainer>
     </>
   )

@@ -35,7 +35,7 @@ export default class CafeController implements CafeControllerInterface {
   private stocks: Stock[] = [];
   private shopItems: ShopItem[] = [];
   private customers: Customer[] = [];
-  private balance: number = 0;
+  private balance: number = 10000;
   private questions: Question[] = [];
   private currentQuestion: Question | null = null;
   private abilities: Ability[];
@@ -58,7 +58,8 @@ export default class CafeController implements CafeControllerInterface {
 
   // Lấy số tiền
   getBalance(): number {
-    return parseInt(getRandomFloat(100, 500) as any);
+    // return parseInt(getRandomFloat(100, 500) as any);
+    return this.balance;
   }
 
   // Lấy danh sách món ăn
