@@ -137,10 +137,16 @@ export default class CafeController implements CafeControllerInterface {
 
     this.balance -= priceToSell;
 
+    let increLevel =  stock.currentIndexLevel + 1
+    if (increLevel > 4) {
+      increLevel = 4
+    }
+
+
     this.stocks[stockIndex] = {
       ...stock,
       enabled: true,
-      currentIndexLevel: stock.currentIndexLevel + 1,
+      currentIndexLevel: increLevel,
     };
 
     return {
