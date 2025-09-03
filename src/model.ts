@@ -7,7 +7,8 @@ export interface Stock {
   enabled: boolean;
   currentIndexLevel: number, // level hiện tại của món ăn -> dùng để map số tiền mua trong shop và tiền nhận đc sau khi bán xong
   sellPrices: number[]; // giá tiền để mua trong shop
-  rewardPrices: number[] // tiền nhận được sau khi bán
+  rewardPrices: number[] // tiền nhận được sau khi bán;
+  isDefaultSell?: boolean // MÓn ăn mặc định có sẵn trong cửa hàng
 }
 
 export interface Question {
@@ -53,8 +54,9 @@ export const STOCKS = [
     enabled: true,
     currentIndexLevel: 0,
     sellPrices: [300, 5250, 42500, 130000, 600000], // để default giá mua là 300 ( level 1 luôn )
-    rewardPrices: [2, 53, 525, 1750, 3500],
-    image: 'blook-toast'
+    rewardPrices: [53, 525, 1750, 3500, 10000],
+    image: 'blook-toast',
+    isDefaultSell: true,
   },
   {
     id: 's2',

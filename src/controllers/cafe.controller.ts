@@ -1,6 +1,7 @@
 import { getRandomFloat, randomFromArray } from "../helpers/random";
 import { Ability, Customer, Stock, OrderItem, Question, ShopItem, STOCKS, QUESTIONS, ABILITIES } from "../model";
 const MAX_CUSTOMER_CAN_SERVE = 3; // sô khách hàng tối đa có thể phục vụ
+const DEFAULT_REWARD_PRICE_TOAST = 2; // sô khách hàng tối đa có thể phục vụ
 const AVATARS_CUSTOMER = [
   '/images/cafe-game/customers/alpaca.svg',
   '/images/cafe-game/customers/chick.svg',
@@ -106,13 +107,7 @@ export default class CafeController implements CafeControllerInterface {
       // @ts-expect-error
       const stock: Stock = this.stocks.find((s) => s.id === item.stockId);
 
-      let level = stock.currentIndexLevel
-
-      if(stock.isDefaultSell && level == 0){
-        level += 1;
-      }
-
-      const priceToSell = stock.sellPrices[level] // giá cần có dể mua được
+      const priceToSell = stock.sellPrices[stock.currentIndexLevel] // giá cần có dể mua được
       return {
         ...item,
         enabled: stock ? this.balance >= priceToSell : false,
@@ -244,6 +239,10 @@ export default class CafeController implements CafeControllerInterface {
       const stock = this.stocks.find(s => s.id === item.stockId)!;
 
       let priceToReward = stock.rewardPrices[stock.currentIndexLevel]; // số tiền nhận đc khi phuc vụ xong 1 món
+
+      if(stock.isDefaultSell && stock.currentIndexLevel == 0) {
+        priceToReward = DEFAULT_REWARD_PRICE_TOAST
+      }
 
       if (this.doubleRewardCount > 0) priceToReward *= 2; // dùng ability x2 tiền
 
