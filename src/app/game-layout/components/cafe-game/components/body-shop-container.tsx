@@ -67,12 +67,14 @@ const BodyShopContainer = () => {
         >
           {cafeStocks.map((dataStock, i) => {
             const enabled = cafeShopItems[i].enabled;
+            console.log(dataStock);
+            
             const currentReward =
               dataStock.rewardPrices[dataStock.currentIndexLevel] || 0;
             const nextReward =
               dataStock.rewardPrices[dataStock.currentIndexLevel + 1] || null;
 
-            let description = `$${currentReward} ${nextReward ? "→" : ""} ${
+            const description = `$${currentReward} ${nextReward ? "→" : ""} ${
               "$" + nextReward
             }`;
             const max =
@@ -89,7 +91,7 @@ const BodyShopContainer = () => {
                 }
                 enabled={enabled}
                 type={ItemType.SHOP}
-                description={max ? currentReward : description}
+                description={max ? `$${currentReward}` : description}
               />
             );
           })}
