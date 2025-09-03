@@ -2,6 +2,7 @@ import gsap from "gsap";
 import { Graphics, TextStyle } from "pixi.js";
 import { useEffect, useRef } from "react";
 import { darken } from "../../../../helpers/color";
+import QuizStore from "@/stores/quiz-store/quiz-store";
 
 export default function AnswerBtn({
   i,
@@ -31,6 +32,15 @@ export default function AnswerBtn({
   const answerBorderRadius = 5;
   const textStyleAnswer = new TextStyle({ ...baseStyle, fill: "white" });
   const btnGraphics = useRef<Graphics>(new Graphics());
+
+  const { answerQuiz } = QuizStore();
+
+  const defaultActive = {
+    interactive: true,
+    eventMode: "static",
+    cursor: "pointer",
+  }
+  const activeObj = answerQuiz ? {} : defaultActive
 
   const drawBoxAnswer = (g: Graphics, colorBoxAnswer: string) => {
     g.clear();
@@ -98,8 +108,7 @@ export default function AnswerBtn({
       <pixiGraphics
         ref={btnGraphics}
         draw={(g) => drawBoxAnswer(g, colors[i])}
-        eventMode="static"
-        cursor="pointer"
+        {...activeObj}
       />
       <pixiText
         text={text}

@@ -6,6 +6,7 @@ import { Graphics, TextStyle, Text, Container } from "pixi.js";
 import { useEffect, useRef } from "react";
 import AnswerBtn from "./answer-btn";
 import { getCafeControllerInstance } from "@/helpers/cafeController.singleton";
+import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";
 
 export default function QuizLayout() {
   useExtend({ Graphics, Text });
@@ -14,14 +15,14 @@ export default function QuizLayout() {
     toggleQuizContainer,
     setShowCongraEffect,
     showCongraEffect,
+    setAnswerQuiz
   } = QuizStore();
+  const { loadCafeStocks } = CafeGameStore();
   const { app } = useApplication();
   const cafeController = getCafeControllerInstance();
-  console.log(123, cafeController.getQuestion());
   const questionData = cafeController.getQuestion();
   const question = questionData.text;
   const answers = questionData.answers;
-  const correctAnswer = questionData.correctAnswerId;
   const appWidth = app.screen.width;
   const appHeight = app.screen.height;
   const quizContainer = useRef<Container>(null);
@@ -75,16 +76,20 @@ export default function QuizLayout() {
   };
 
   const doClickAnswser = (answerId: any) => {
-    console.log(answerId);
+    setAnswerQuiz(true);
+    setTimeout(() => {
+      setAnswerQuiz(false);
+      setToggleQuizContainer(false);
+      setShowCongraEffect(false);
+      loadCafeStocks();
+    }, 2000);
+    const userAnswer = cafeController.answerQuestion(answerId)
+    console.log('userAnswer', userAnswer);
 
-    if (answerId != correctAnswer) {
+    if (!userAnswer.correct) {
       return
     }
     setShowCongraEffect(true);
-    if (showCongraEffect) {
-      setShowCongraEffect(false);
-      setToggleQuizContainer(false);
-    }
   };
 
   useEffect(() => {
