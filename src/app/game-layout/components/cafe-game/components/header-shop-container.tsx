@@ -4,7 +4,7 @@ import { LayoutContainer } from '@pixi/layout/components';
 import { usePixiTexture } from "@/hooks/usePixiTexture";
 import { fitRepeatTexture } from "@/utils/fitRepeatTexture";
 import { useApplication, useExtend } from "@pixi/react"
-import { Container, Graphics, Sprite, Text, Texture, TilingSprite } from "pixi.js";
+import { Assets, Container, Graphics, Sprite, Text, Texture, TilingSprite } from "pixi.js";
 import RenderIf from '@/utils/condition-render';
 import CafeGameStore from '@/stores/cafe-game-store/cafe-game-store';
 
@@ -12,9 +12,9 @@ export default function HeaderShopContainer() {
   useExtend({ Sprite, Graphics, Text, TilingSprite, LayoutContainer, Container });
   const { app } = useApplication();
   const { toggleAbilitiShop, cafeBalance } = CafeGameStore();
-  const textureCurtain = !toggleAbilitiShop ? usePixiTexture("/images/cafe-game/curtain.svg") : usePixiTexture("/images/cafe-game/curtain-abilities.svg");
-  const textureRibonUpgrade = !toggleAbilitiShop ? usePixiTexture("/images/cafe-game/ribbon-upgrade.svg") : usePixiTexture("/images/cafe-game/ribbon-upgrade-abilities.svg");
-  const textureRibonMoney = !toggleAbilitiShop ? usePixiTexture("/images/cafe-game/ribbon-money.svg") : usePixiTexture("/images/cafe-game/ribbon-money-abilities.svg");
+  const textureCurtain = !toggleAbilitiShop ? Assets.get("curtain") : Assets.get("curtain-abilities");
+  const textureRibonUpgrade = !toggleAbilitiShop ? Assets.get("ribbon-upgrade") : Assets.get("ribbon-upgrade-abilities");
+  const textureRibonMoney = !toggleAbilitiShop ? Assets.get("ribbon-money") : Assets.get("ribbon-money-abilities");
   const curtainSpriteWidth = app.screen.width;
   const curtainSpriteHeight = app.screen.height / 5;
   const ribonUpgradeSpriteWidth = app.screen.width / 3.1;

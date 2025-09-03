@@ -13,6 +13,6 @@ export default function Home() {
       <Application resizeTo={gameContainer} antialias>
         <GameContainer />
       </Application>
-    </div >
+    </div>
   );
 }
