@@ -2,12 +2,10 @@
 
 import "@pixi/layout/react";
 import "@pixi/layout";
-import { usePixiTexture } from "@/hooks/usePixiTexture";
 import { useApplication, useExtend } from "@pixi/react";
 import { Assets, Container, Graphics, Sprite, Texture } from "pixi.js";
-import { use, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LayoutContainer } from "@pixi/layout/components";
-import { randomFromArray } from "@/helpers/random";
 import gsap from "gsap";
 import RenderIf from "@/utils/condition-render";
 import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";

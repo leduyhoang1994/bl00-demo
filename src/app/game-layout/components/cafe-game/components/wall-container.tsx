@@ -1,8 +1,7 @@
-'use client';
+"use client";
 
-import { usePixiTexture } from "@/hooks/usePixiTexture";
 import { useApplication, useExtend } from "@pixi/react";
-import { Graphics, Sprite, Texture, TilingSprite, Text } from "pixi.js";
+import { Graphics, Sprite, Texture, TilingSprite, Text, Assets } from "pixi.js";
 import BoxLayout from "../../box-layout/box-layout";
 import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";
 
@@ -15,10 +14,10 @@ export default function WallContainer() {
   const currentWallHeight = appHeight / 2;
   const itemsContainerWidth = appWidth * 0.9;
   const itemsContainerHeight = appHeight * 0.8 * 0.5;
-  const textureWall = usePixiTexture("/images/cafe-game/back-ground-row.svg");
-  const textureClock = usePixiTexture("/images/cafe-game/clock.svg");
-  const textureWindow = usePixiTexture("/images/cafe-game/window.svg");
-  const textureMenu = usePixiTexture("/images/cafe-game/menu.svg");
+  const textureWall = Assets.get("back-ground-row");
+  const textureClock = Assets.get("clock");
+  const textureWindow = Assets.get("window");
+  const textureMenu = Assets.get("menu");
 
   return (
     <pixiContainer label="Wall cafe-game">
@@ -32,7 +31,8 @@ export default function WallContainer() {
         />
       )}
 
-      <pixiContainer label="Items Wall cafe-game"
+      <pixiContainer
+        label="Items Wall cafe-game"
         width={itemsContainerWidth}
         height={itemsContainerHeight}
         x={(appWidth - itemsContainerWidth) / 2}
@@ -61,7 +61,7 @@ export default function WallContainer() {
         {textureMenu !== Texture.EMPTY && (
           <pixiSprite
             texture={textureMenu}
-            x={itemsContainerWidth - (itemsContainerWidth / 6)}
+            x={itemsContainerWidth - itemsContainerWidth / 6}
             y={(itemsContainerHeight - itemsContainerWidth / 5) / 2}
             width={itemsContainerWidth / 6}
             height={itemsContainerWidth / 5}
@@ -72,5 +72,5 @@ export default function WallContainer() {
         <BoxLayout value={cafeBalance} />
       </pixiContainer>
     </pixiContainer>
-  )
+  );
 }

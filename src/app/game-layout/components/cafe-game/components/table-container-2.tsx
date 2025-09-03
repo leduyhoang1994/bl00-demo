@@ -2,9 +2,8 @@
 
 import "@pixi/layout/react";
 import "@pixi/layout";
-import { usePixiTexture } from "@/hooks/usePixiTexture";
 import { useApplication, useExtend } from "@pixi/react";
-import { Container, Sprite, Texture, TilingSprite } from "pixi.js";
+import { Assets, Container, Sprite, Texture, TilingSprite } from "pixi.js";
 import { LayoutContainer } from "@pixi/layout/components";
 import Plate from "./plate";
 
@@ -14,9 +13,7 @@ export default function TableContainer2() {
   const appHeight = app.screen.height;
   const appWidth = app.screen.width;
   const currentTableHeight = appHeight / 2;
-  const textureTable = usePixiTexture(
-    "/images/cafe-game/back-ground-table.svg"
-  );
+  const textureTable = Assets.get("back-ground-table");
 
   return (
     <layoutContainer

@@ -1,7 +1,6 @@
 import '@pixi/layout/react';
 import '@pixi/layout';
 import { LayoutContainer } from '@pixi/layout/components';
-import { usePixiTexture } from "@/hooks/usePixiTexture";
 import { fitRepeatTexture } from "@/utils/fitRepeatTexture";
 import { useApplication, useExtend } from "@pixi/react"
 import { Assets, Container, Graphics, Sprite, Text, Texture, TilingSprite } from "pixi.js";

@@ -2,8 +2,7 @@ import "@pixi/layout/react";
 import "@pixi/layout";
 import { LayoutContainer } from "@pixi/layout/components";
 import { useExtend } from "@pixi/react";
-import { Sprite, Texture } from "pixi.js";
-import { usePixiTexture } from "@/hooks/usePixiTexture";
+import { Assets, Sprite, Texture } from "pixi.js";
 import RenderIf from "@/utils/condition-render";
 import ItemShopContainer, { ItemType } from "./item-shop-container";
 import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";
@@ -14,7 +13,7 @@ const BodyShopContainer = () => {
   const { toggleAbilitiShop, cafeShopItems, cafeStocks, cafeAbilitiesItems } =
     CafeGameStore();
 
-  const textureWallShop = usePixiTexture("/images/cafe-game/wall-shop.svg");
+  const textureWallShop = Assets.get("wall-shop");
 
   return (
     <layoutContainer

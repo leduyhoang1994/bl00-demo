@@ -4,15 +4,14 @@ import "@pixi/layout/react";
 import "@pixi/layout";
 import { useApplication, useExtend } from "@pixi/react";
 import { LayoutContainer } from "@pixi/layout/components";
-import { usePixiTexture } from "@/hooks/usePixiTexture";
-import { Sprite, Texture } from "pixi.js";
+import { Assets, Sprite, Texture } from "pixi.js";
 
 export default function QuizLayout2() {
   useExtend({ LayoutContainer, Sprite });
   const { app } = useApplication();
   const appHeight = app.screen.height;
   const appWidth = app.screen.width;
-  const texturePlate = usePixiTexture("/images/cafe-game/plate.svg");
+  const texturePlate = Assets.get("plate");
 
   return (
     <layoutContainer

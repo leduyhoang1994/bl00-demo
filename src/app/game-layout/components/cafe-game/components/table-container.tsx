@@ -1,6 +1,5 @@
 "use client";
 
-import { usePixiTexture } from "@/hooks/usePixiTexture";
 import { useApplication, useExtend } from "@pixi/react";
 import { Assets, Container, Sprite, Texture, TilingSprite } from "pixi.js";
 import ButtonLayout from "../../button-layout/button-layout";
@@ -19,9 +18,8 @@ export default function TableContainer() {
   const appHeight = app.screen.height;
   const appWidth = app.screen.width;
   const currentTableHeight = appHeight / 2;
-  const textureTable = usePixiTexture(
-    "/images/cafe-game/back-ground-table.svg"
-  );
+  const textureTable = Assets.get("back-ground-table");
+  
 
   const itemsContainerWidth = appWidth * 0.92;
 
@@ -58,7 +56,7 @@ export default function TableContainer() {
       <pixiContainer
         label="Plate Table cafe-game"
         ref={plateContainer}
-        x={(appWidth - plateContainer.current.width) / 2}
+        x={150}
         y={15}
       >
         {cafeStocks.map((_, i) => {

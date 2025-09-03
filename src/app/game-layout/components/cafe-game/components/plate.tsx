@@ -2,14 +2,13 @@
 
 import "@pixi/layout/react";
 import "@pixi/layout";
-import { usePixiTexture } from "@/hooks/usePixiTexture";
-import { Container } from "pixi.js";
+import { Assets, Container } from "pixi.js";
 import { useRef } from "react";
 
 const PLATE_SIZE = 120;
 
 export default function Plate({ i }: { i: number }) {
-  const texturePlate = usePixiTexture("/images/cafe-game/plate.svg");
+  const texturePlate = Assets.get("plate");
   const plateContainer = useRef<Container>(null);
   return (
     <pixiContainer
