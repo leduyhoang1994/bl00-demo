@@ -10,18 +10,20 @@ import CafeGameStore from '@/stores/cafe-game-store/cafe-game-store';
 export default function ShopContainer() {
   useExtend({ LayoutContainer });
   const { app } = useApplication();
-  const { setToggleAbilitiShop, setToggleVisitShop, toggleAbilitiShop } = CafeGameStore();
+  const { setToggleAbilitiShop, setToggleVisitShop, toggleAbilitiShop, loadCafeShopItems, loadCafeAbilities } = CafeGameStore();
   const appHeight = app.screen.height;
   const appWidth = app.screen.width;
   const buttonContainerWidth = appWidth * 0.95;
   const buttonContainerHeight = appHeight / 9;
   const buttonWidth = appWidth / 4;
 
-  const doClickAbilities = () => {
-    console.log('doClickAbilities');
+  const doClickToggleAbilitesAndShop = () => {
+    console.log('doClickToggleAbilitesAndShop');
     setToggleAbilitiShop(!toggleAbilitiShop);
-
+    loadCafeAbilities();
+    loadCafeShopItems();
   }
+
   const doClickExitShop = () => {
     console.log('doClickExitShop');
     setToggleAbilitiShop(false);
@@ -48,7 +50,7 @@ export default function ShopContainer() {
           <ButtonLayout
             btnWidth={buttonWidth}
             btnText={!toggleAbilitiShop ? "Abilities" : "Upgrades"}
-            doClickBtn={doClickAbilities}
+            doClickBtn={doClickToggleAbilitesAndShop}
           />
           <ButtonLayout
             btnWidth={buttonWidth}

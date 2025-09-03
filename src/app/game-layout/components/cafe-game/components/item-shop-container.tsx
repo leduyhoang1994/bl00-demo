@@ -49,7 +49,6 @@ const ItemShopContainer = ({
     cursor: "pointer",
     onClick: () => doClickBuyItem()
   }
-  console.log('description', description);
 
   const activeObj = enabled ? defaultActive : {};
 
