@@ -49,6 +49,7 @@ const ItemShopContainer = ({
     cursor: "pointer",
     onClick: () => doClickBuyItem()
   }
+  console.log('description', description);
 
   const activeObj = enabled ? defaultActive : {};
 
@@ -139,7 +140,7 @@ const ItemShopContainer = ({
               resolution={2}
             />
             <pixiText
-              text={description}
+              text={type == ItemType.SHOP ? `$${description}` : description}
               layout={{
                 marginTop: 0,
                 objectFit: 'contain',

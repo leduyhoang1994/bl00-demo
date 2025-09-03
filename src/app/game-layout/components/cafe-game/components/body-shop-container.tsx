@@ -65,8 +65,14 @@ const BodyShopContainer = () => {
         >
           {cafeStocks.map((dataStock, i) => {
             const enabled = cafeShopItems[i].enabled;
+            const description = dataStock.priceReWard;
             return (
-              <ItemShopContainer key={i} {...dataStock} enabled={enabled} type={ItemType.SHOP} />
+              <ItemShopContainer
+                key={i}
+                {...dataStock}
+                enabled={enabled}
+                type={ItemType.SHOP}
+                description={description} />
             )
           })}
         </layoutContainer>
