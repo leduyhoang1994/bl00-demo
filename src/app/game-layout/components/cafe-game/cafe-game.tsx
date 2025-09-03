@@ -5,17 +5,13 @@ import TableContainer from "./components/table-container";
 import WallContainer from "./components/wall-container";
 import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";
 import { useEffect } from "react";
-import CafeController from "@/controllers/cafe.controller";
 import CustomerContainer from "./components/customer-container";
-import { getCafeControllerInstance } from "@/helpers/cafeController.singleton";
 
 export default function CafeGame() {
-  const { toggleVisitShop, loadCafeBalance, loadCafeShopItems, loadCafeStocks } = CafeGameStore();
+  const { toggleVisitShop, loadCafeData } = CafeGameStore();
 
   useEffect(() => {
-    loadCafeBalance();
-    loadCafeStocks();
-    loadCafeShopItems();
+    loadCafeData();
   }, [])
 
   return (

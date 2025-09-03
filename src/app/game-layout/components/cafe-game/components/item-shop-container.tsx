@@ -2,35 +2,55 @@ import '@pixi/layout/react';
 import '@pixi/layout';
 import { LayoutContainer } from '@pixi/layout/components';
 import { useExtend } from '@pixi/react';
-import { Graphics, Sprite, Texture } from 'pixi.js';
-import { usePixiTexture } from '@/hooks/usePixiTexture';
+import { Assets, Graphics, Sprite, Texture } from 'pixi.js';
 import RenderIf from '@/utils/condition-render';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
+import { getCafeControllerInstance } from '@/helpers/cafeController.singleton';
+import CafeGameStore from '@/stores/cafe-game-store/cafe-game-store';
 
-export default function ItemShopContainer({
+
+export enum ItemType {
+  SHOP = 'SHOP',
+  ABILITIES = 'ABILITIES'
+}
+
+const cafeController = getCafeControllerInstance();
+
+const ItemShopContainer = ({
   name = "Toast",
-  price = 0,
+  priceSell = 0,
   description = '',
   image = '',
   disablePlate = false,
   itemWidth = 250,
   itemHeight = 120,
-  rotation = false
-}) {
+  rotation = false,
+  enabled = false,
+  id = 0,
+  type = ItemType.SHOP
+}) => {
   useExtend({ LayoutContainer, Sprite, Graphics });
-
-  const texturePlateActive = usePixiTexture("/images/cafe-game/plate-active.svg");
-  const textureItem = usePixiTexture(image);
-  const borderColor = '#4d4d4d';
-  const shadowColor = '#5a5a5a';
-  const mainColor = '#757575';
-  const textColor = '#3a3a3a';
+  const { loadCafeBalance, loadCafeAbilities, loadCafeShopItems } = CafeGameStore();
+  const texturePlateActive = Assets.get('plate-active');
+  const textureItem = Assets.get(image);
+  const borderColor = enabled ? '#0e6b71' : '#4d4d4d';
+  const shadowColor = enabled ? '#118891' : '#5a5a5a';
+  const mainColor = enabled ? '#099faa' : '#757575';
+  const textColor = enabled ? 'white' : '#3a3a3a';
   const borderWidth = 4;
 
   const itemRadius = 10;
   const shadowHeight = 5;
   const widthPlate = 100;
   const heightPlate = 100;
+  const defaultActive = {
+    interactive: true,
+    eventMode: "static",
+    cursor: "pointer",
+    onClick: () => doClickBuyItem()
+  }
+
+  const activeObj = enabled ? defaultActive : {};
 
   const drawItem = useCallback(
     (g: Graphics) => {
@@ -65,6 +85,20 @@ export default function ItemShopContainer({
     ]
   );
 
+  const doClickBuyItem = () => {
+    console.log('doClickBuyItem', id);
+    if (type == ItemType.SHOP) {
+      cafeController.buyShopItem(String(id));
+      loadCafeShopItems();
+    }
+    if (type == ItemType.ABILITIES) {
+      cafeController.buyAbilityItem(id);
+      loadCafeAbilities();
+    }
+
+    loadCafeBalance();
+  }
+
   return (
     <>
       <RenderIf condition={texturePlateActive != Texture.EMPTY && textureItem != Texture.EMPTY}>
@@ -75,10 +109,11 @@ export default function ItemShopContainer({
             flexDirection: "row",
           }}
         >
-          <layoutContainer layout={{
-            width: '100%',
-            height: '100%'
-          }}
+          <layoutContainer
+            layout={{
+              width: '100%',
+              height: '100%'
+            }}
           >
             <pixiGraphics draw={drawItem} />
           </layoutContainer>
@@ -107,8 +142,9 @@ export default function ItemShopContainer({
               text={description}
               layout={{
                 marginTop: 0,
-                objectFit: 'fill',
-                width: itemWidth / 1.6,
+                objectFit: 'contain',
+                objectPosition: 'right',
+                width: 200,
               }}
               style={{
                 fontSize: 14,
@@ -122,7 +158,7 @@ export default function ItemShopContainer({
               resolution={2}
             />
             <pixiText
-              text={`$${price}`}
+              text={`$${priceSell}`}
               layout={{
                 marginTop: 10
               }}
@@ -161,8 +197,17 @@ export default function ItemShopContainer({
                 marginLeft: rotation ? 10 : 0
               }} />
           </layoutContainer>
+          <pixiGraphics
+            draw={(g) => {
+              g.clear();
+              g.roundRect(0, 0, itemWidth, itemHeight).fill({ color: "0x000000", alpha: 0 });
+            }}
+            {...activeObj}
+          />
         </layoutContainer>
       </RenderIf>
     </>
   )
 }
+
+export default React.memo(ItemShopContainer)

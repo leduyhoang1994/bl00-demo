@@ -7,7 +7,6 @@ import ButtonLayout from "../../button-layout/button-layout";
 import QuizStore from "@/stores/quiz-store/quiz-store";
 import { useRef } from "react";
 import CafeGameStore from "@/stores/cafe-game-store/cafe-game-store";
-import { getCafeControllerInstance } from "@/helpers/cafeController.singleton";
 import PlateComponent from "./plate-component";
 
 export default function TableContainer() {
@@ -16,6 +15,7 @@ export default function TableContainer() {
   const { setToggleVisitShop, cafeStocks } = CafeGameStore();
   const { app } = useApplication();
   const plateContainer = useRef<Container>(new Container());
+  console.log('cafeStocks', cafeStocks);
 
   const appHeight = app.screen.height;
   const appWidth = app.screen.width;
@@ -39,8 +39,6 @@ export default function TableContainer() {
     console.log("doClickVisitShop");
     setToggleVisitShop(true);
   };
-
-  console.log('cafeStocks', cafeStocks);
 
   return (
     <pixiContainer
@@ -80,7 +78,6 @@ export default function TableContainer() {
           const enabled = plateData.enabled;
           const quantity = plateData.quantity;
           return (
-
             <PlateComponent
               enabled={enabled}
               quantity={quantity}

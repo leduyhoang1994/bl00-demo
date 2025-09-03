@@ -170,7 +170,7 @@ export const ABILITIES = [
     enabled: false,
     purchased: false,
     isActive: false,
-    image: '/images/cafe-game/abilities/PaycheckBonus.png'
+    image: 'abilities-paycheck'
   },
   {
     id: 2,
@@ -180,7 +180,7 @@ export const ABILITIES = [
     enabled: false,
     purchased: false,
     isActive: true,
-    image: '/images/cafe-game/abilities/SupplyCrate.png'
+    image: 'abilites-supply'
   },
   {
     id: 3,
@@ -190,7 +190,7 @@ export const ABILITIES = [
     enabled: false,
     purchased: false,
     isActive: true,
-    image: '/images/cafe-game/abilities/HappyCustomers.png'
+    image: 'abilities-happy'
   },
   {
     id: 4,
@@ -200,7 +200,7 @@ export const ABILITIES = [
     enabled: false,
     purchased: false,
     isActive: false,
-    image: '/images/cafe-game/abilities/TrashtheFood.png'
+    image: 'abilites-trash'
   },
   {
     id: 5,
@@ -210,7 +210,7 @@ export const ABILITIES = [
     enabled: false,
     purchased: false,
     isActive: false,
-    image: '/images/cafe-game/abilities/TAXES!!!.png'
+    image: 'abilites-taxes'
   },
   {
     id: 6,
@@ -220,7 +220,7 @@ export const ABILITIES = [
     enabled: false,
     purchased: false,
     isActive: false,
-    image: '/images/cafe-game/abilities/HealthInspection.png'
+    image: 'abilites-health'
   },
   {
     id: 7,
@@ -230,7 +230,7 @@ export const ABILITIES = [
     enabled: false,
     purchased: false,
     isActive: true,
-    image: '/images/cafe-game/abilities/RunItBack.png'
+    image: 'abilities-run'
   },
 ];
 
