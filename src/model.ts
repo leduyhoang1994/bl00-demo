@@ -53,7 +53,7 @@ export const STOCKS = [
     price: 5,
     enabled: true,
     currentIndexLevel: 0,
-    sellPrices: [0, 300, 5250, 1750, 3500],
+    sellPrices: [300, 300, 5250, 1750, 3500],
     rewardPrices: [2, 53, 525, 1750, 3500],
     image: 'blook-toast'
   },
