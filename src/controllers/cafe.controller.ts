@@ -2,6 +2,7 @@ import { getRandomFloat, randomFromArray } from "../helpers/random";
 import { Ability, Customer, Stock, OrderItem, Question, ShopItem, STOCKS, QUESTIONS, ABILITIES } from "../model";
 const MAX_CUSTOMER_CAN_SERVE = 3; // sô khách hàng tối đa có thể phục vụ
 const DEFAULT_REWARD_PRICE_TOAST = 2; // sô khách hàng tối đa có thể phục vụ
+const INDEX_MAX_LEVEL = 4; // max level
 const AVATARS_CUSTOMER = [
   '/images/cafe-game/customers/alpaca.svg',
   '/images/cafe-game/customers/chick.svg',
@@ -137,16 +138,17 @@ export default class CafeController implements CafeControllerInterface {
 
     this.balance -= priceToSell;
 
-    let increLevel =  stock.currentIndexLevel + 1
-    if (increLevel > 4) {
-      increLevel = 4
+    let levelUp =  stock.currentIndexLevel + 1
+
+    if (levelUp > INDEX_MAX_LEVEL) {
+      levelUp = INDEX_MAX_LEVEL
     }
 
 
     this.stocks[stockIndex] = {
       ...stock,
       enabled: true,
-      currentIndexLevel: increLevel,
+      currentIndexLevel: levelUp,
     };
 
     return {
