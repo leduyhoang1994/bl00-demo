@@ -74,10 +74,6 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.run-command }} ${{ steps.detect-package-manager.outputs.install-command }}
         working-directory: ${{ env.PROJECT_DIR }}
 
-      - name: Build with Next.js
-        run: ${{ steps.detect-package-manager.outputs.run-command }} next build
-        working-directory: ${{ env.PROJECT_DIR }}
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
