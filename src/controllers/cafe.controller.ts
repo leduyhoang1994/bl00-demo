@@ -137,7 +137,6 @@ export default class CafeController implements CafeControllerInterface {
     this.stocks[stockIndex] = {
       ...stock,
       enabled: true,
-      quantity: stock.quantity + 1,
       currentIndexLevel: stock.currentIndexLevel + 1,
     };
 
