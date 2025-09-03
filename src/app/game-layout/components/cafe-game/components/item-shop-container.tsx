@@ -30,7 +30,7 @@ const ItemShopContainer = ({
   type = ItemType.SHOP
 }) => {
   useExtend({ LayoutContainer, Sprite, Graphics });
-  const { loadCafeBalance, loadCafeAbilities, loadCafeShopItems } = CafeGameStore();
+  const { loadCafeBalance, loadCafeAbilities, loadCafeShopItems, loadCafeStocks } = CafeGameStore();
   const texturePlateActive = Assets.get('plate-active');
   const textureItem = Assets.get(image);
   const borderColor = enabled ? '#0e6b71' : '#4d4d4d';
@@ -95,7 +95,7 @@ const ItemShopContainer = ({
       cafeController.buyAbilityItem(id);
       loadCafeAbilities();
     }
-
+    loadCafeStocks();
     loadCafeBalance();
   }
 
