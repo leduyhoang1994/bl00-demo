@@ -3,25 +3,26 @@ import CafeController from "./cafe.controller";
 const game = new CafeController();
 
 console.log('Balance hiện tại:', game.getBalance());
-console.log('Food stock hiên tại', game.getStocks());
+// console.log('Food stock hiên tại', game.getStocks());
+// console.log('Food stock hiên tại', game.getShop());
 const cust1 = game.getNextCustomer();
-const cust2 = game.getNextCustomer();
-const cust3 = game.getNextCustomer();
+// const cust2 = game.getNextCustomer();
+// const cust3 = game.getNextCustomer();
 
-console.log('CUSTOMERS 1', cust1);
+// console.log('CUSTOMERS 1', cust1);
 
 // ===================== TEST QUESTION =====================
-const q = game.getQuestion();
-console.log('Trả lời đúng:', game.answerQuestion(q.correctAnswerId));
-console.log('Food stock sau khi trả lời đúng:', game.getStocks());
+// const q = game.getQuestion();
+// console.log('Trả lời đúng:', game.answerQuestion(q.correctAnswerId));
+// console.log('Food stock sau khi trả lời đúng:', game.getStocks());
 
 // MUA cho khách 1
 game.serve(cust1.id);
 console.log('Balance sau khi mua khach 1:', game.getBalance());
-console.log('Food stock sau khi mua khach 1', game.getStocks());
-console.log('Shop sau khi mua khach 1', game.getShop());
-const customer4 = game.getNextCustomer();
-console.log('CUSTOMERS 4', customer4);
+// console.log('Food stock sau khi mua khach 1', game.getStocks());
+// console.log('Shop sau khi mua khach 1', game.getShop());
+// const customer4 = game.getNextCustomer();
+// console.log('CUSTOMERS 4', customer4);
 
 // const q2 = game.getQuestion();
 
@@ -31,26 +32,26 @@ console.log('CUSTOMERS 4', customer4);
 // console.log('Food stock sau khi mua item', game.getStocks());
 
 // MUA cho khách 2
-const q2 = game.getQuestion();
-console.log(
-    'Trả lời đúng q2:',
-    game.answerQuestion(q2.correctAnswerId),
-);
-console.log('Food stock sau khi trả lời đúng:', game.getStocks());
-game.serve(cust2.id);
-console.log('Balance sau khi mua khach 2:', game.getBalance());
-console.log('Food stock sau khi mua khach 2', game.getStocks());
-console.log('Shop sau khi mua khach 2', game.getShop());
-// console.log('Abilities sau khi mua khach 2', game.getAbilities());
-
-// game.buyShopItem('s1');
-console.log('Balance sau khi mua s1:', game.getBalance());
-console.log('Food stock sau khi mua s1', game.getStocks());
-console.log('Shop sau khi mua s1', game.getShop());
-// game.buyShopItem('s2');
-console.log('Balance sau khi mua s2:', game.getBalance());
-console.log('Food stock sau khi mua s2', game.getStocks());
-console.log('Shop sau khi mua s2', game.getShop());
+// const q2 = game.getQuestion();
+// console.log(
+//     'Trả lời đúng q2:',
+//     game.answerQuestion(q2.correctAnswerId),
+// );
+// console.log('Food stock sau khi trả lời đúng:', game.getStocks());
+// game.serve(cust2.id);
+// console.log('Balance sau khi mua khach 2:', game.getBalance());
+// console.log('Food stock sau khi mua khach 2', game.getStocks());
+// console.log('Shop sau khi mua khach 2', game.getShop());
+// // console.log('Abilities sau khi mua khach 2', game.getAbilities());
+//
+// // game.buyShopItem('s1');
+// console.log('Balance sau khi mua s1:', game.getBalance());
+// console.log('Food stock sau khi mua s1', game.getStocks());
+// console.log('Shop sau khi mua s1', game.getShop());
+// // game.buyShopItem('s2');
+// console.log('Balance sau khi mua s2:', game.getBalance());
+// console.log('Food stock sau khi mua s2', game.getStocks());
+// console.log('Shop sau khi mua s2', game.getShop());
 
 // ===================== TEST SHOP =====================
 // console.log('\n--- Test Shop ---');
